@@ -6,6 +6,7 @@ export class Player extends Character {
   speed: number = 3;
 
   shotArray: Shot[] = [];
+  singleShotArray: Shot[] = [];
   shotCheckCounter = 0;
   shotInterval = 10;
 
@@ -76,6 +77,19 @@ export class Player extends Character {
               break;
             }
           }
+          for (let i = 0; i < this.singleShotArray.length; i += 2) {
+            if (
+              this.singleShotArray[i].life <= 0 &&
+              this.singleShotArray[i + 1].life <= 0
+            ) {
+              this.singleShotArray[i].set(this.position.x, this.position.y);
+              this.singleShotArray[i].setVector(0.2, -0.9);
+              this.singleShotArray[i + 1].set(this.position.x, this.position.y);
+              this.singleShotArray[i + 1].setVector(-0.2, -0.9);
+              this.shotCheckCounter = -this.shotInterval;
+              break;
+            }
+          }
         }
       }
     }
@@ -85,8 +99,9 @@ export class Player extends Character {
     this.ctx.globalAlpha = 1.0;
   }
 
-  setShotArray(shotArray: Shot[]) {
+  setShotArray(shotArray: Shot[], singleShotArray: Shot[]) {
     this.shotArray = shotArray;
+    this.singleShotArray = singleShotArray;
   }
 
   setComing(startX: number, startY: number, endX: number, endY: number) {

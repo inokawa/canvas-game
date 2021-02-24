@@ -2,6 +2,7 @@ import * as util from "./canvas";
 import { State, Player, Shot, Character } from "./characters";
 import viperImage from "./assets/images/viper.png";
 import viperShotImage from "./assets/images/viper_shot.png";
+import viperSingleShotImage from "./assets/images/viper_single_shot.png";
 
 export const init = async () => {
   const canvas = document.querySelector("#screen") as HTMLCanvasElement;
@@ -37,8 +38,11 @@ export const init = async () => {
   const shotArray: Shot[] = Array.from({ length: SHOT_MAX_COUNT }).map(
     () => new Shot(ctx, 0, 0, 32, 32, viperShotImage)
   );
-  player.setShotArray(shotArray);
-  characters.push(...shotArray);
+  const singleShotArray: Shot[] = Array.from({
+    length: SHOT_MAX_COUNT * 2,
+  }).map(() => new Shot(ctx, 0, 0, 32, 32, viperSingleShotImage));
+  player.setShotArray(shotArray, singleShotArray);
+  characters.push(...shotArray, ...singleShotArray);
 
   window.addEventListener("keydown", (event) => {
     switch (event.key) {
