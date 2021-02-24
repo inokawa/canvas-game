@@ -66,4 +66,8 @@ export class Character {
   }
 
   update() {}
+
+  ready(): boolean {
+    return !!this.image;
+  }
 }

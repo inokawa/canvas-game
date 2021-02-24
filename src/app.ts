@@ -83,8 +83,16 @@ export const init = async () => {
     }
   });
 
-  const startTime = Date.now();
-  render();
+  let startTime: number;
+  (function wait() {
+    const isReady = characters.every((c) => c.ready());
+    if (!isReady) {
+      setTimeout(wait, 100);
+      return;
+    }
+    startTime = Date.now();
+    render();
+  })();
 
   function render() {
     ctx.globalAlpha = 1.0;
