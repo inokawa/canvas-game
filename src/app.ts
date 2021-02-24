@@ -1,5 +1,5 @@
 import * as util from "./canvas";
-import { Player } from "./classes";
+import { Player } from "./characters";
 import { loadImage } from "./utils";
 import viperImage from "./assets/images/viper.png";
 
