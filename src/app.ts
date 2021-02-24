@@ -48,20 +48,7 @@ export const init = async () => {
     ctx.globalAlpha = 1.0;
     util.drawRect(ctx, 0, 0, canvas.width, canvas.height, "#eeeeee");
 
-    if (player.isComing) {
-      const justTime = Date.now();
-      const comingTime = (justTime - startTime) / 1000;
-      player.position.y = CANVAS_HEIGHT - comingTime * 50;
-      if (player.position.y <= CANVAS_HEIGHT - 100) {
-        player.isComing = false;
-        player.position.y = CANVAS_HEIGHT - 100;
-      }
-      if (justTime % 100 < 50) {
-        ctx.globalAlpha = 0.5;
-      }
-    }
-
-    player.draw();
+    player.update();
     requestAnimationFrame(render);
   }
 };
