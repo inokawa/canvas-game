@@ -13,7 +13,7 @@ export const init = async () => {
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
   const ctx = canvas.getContext("2d")!;
-  const player = new Player(ctx, 0, 0, image);
+  const player = new Player(ctx, 0, 0, 64, 64, image);
   player.setComing(
     CANVAS_WIDTH / 2,
     CANVAS_HEIGHT,

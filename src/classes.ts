@@ -1,6 +1,8 @@
 export class Character {
   ctx: CanvasRenderingContext2D;
   position: Position;
+  width: number;
+  height: number;
   life: number;
   image: HTMLImageElement;
 
@@ -8,17 +10,29 @@ export class Character {
     ctx: CanvasRenderingContext2D,
     x: number,
     y: number,
+    w: number,
+    h: number,
     life: number,
     image: HTMLImageElement
   ) {
     this.ctx = ctx;
     this.position = new Position(x, y);
+    this.width = w;
+    this.height = h;
     this.life = life;
     this.image = image;
   }
 
   draw() {
-    this.ctx.drawImage(this.image, this.position.x, this.position.y);
+    const offsetX = this.width / 2;
+    const offsetY = this.height / 2;
+    this.ctx.drawImage(
+      this.image,
+      this.position.x - offsetX,
+      this.position.y - offsetY,
+      this.width,
+      this.height
+    );
   }
 }
 
@@ -47,9 +61,11 @@ export class Player extends Character {
     ctx: CanvasRenderingContext2D,
     x: number,
     y: number,
+    w: number,
+    h: number,
     image: HTMLImageElement
   ) {
-    super(ctx, x, y, 0, image);
+    super(ctx, x, y, w, h, 0, image);
   }
 
   update() {
