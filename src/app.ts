@@ -1,4 +1,5 @@
 import * as util from "./canvas";
+import { Player } from "./classes";
 import { loadImage } from "./utils";
 import viperImage from "./assets/images/viper.png";
 
@@ -12,25 +13,28 @@ export const init = async () => {
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
   const ctx = canvas.getContext("2d")!;
-
-  let isComing = true;
-  let x = CANVAS_WIDTH / 2;
-  let y = CANVAS_HEIGHT;
+  const player = new Player(ctx, 0, 0, image);
+  player.setComing(
+    CANVAS_WIDTH / 2,
+    CANVAS_HEIGHT,
+    CANVAS_WIDTH / 2,
+    CANVAS_HEIGHT - 100
+  );
 
   window.addEventListener("keydown", (event) => {
-    if (isComing) return;
+    if (player.isComing) return;
     switch (event.key) {
       case "ArrowLeft":
-        x -= 10;
+        player.position.x -= 10;
         break;
       case "ArrowRight":
-        x += 10;
+        player.position.x += 10;
         break;
       case "ArrowUp":
-        y -= 10;
+        player.position.y -= 10;
         break;
       case "ArrowDown":
-        y += 10;
+        player.position.y += 10;
         break;
       default:
         break;
@@ -43,22 +47,21 @@ export const init = async () => {
   function render() {
     ctx.globalAlpha = 1.0;
     util.drawRect(ctx, 0, 0, canvas.width, canvas.height, "#eeeeee");
-    const currentTime = (Date.now() - startTime) / 1000;
 
-    if (isComing) {
+    if (player.isComing) {
       const justTime = Date.now();
       const comingTime = (justTime - startTime) / 1000;
-      y = CANVAS_HEIGHT - comingTime * 50;
-      if (y <= CANVAS_HEIGHT - 100) {
-        isComing = false;
-        y = CANVAS_HEIGHT - 100;
+      player.position.y = CANVAS_HEIGHT - comingTime * 50;
+      if (player.position.y <= CANVAS_HEIGHT - 100) {
+        player.isComing = false;
+        player.position.y = CANVAS_HEIGHT - 100;
       }
       if (justTime % 100 < 50) {
         ctx.globalAlpha = 0.5;
       }
     }
 
-    ctx.drawImage(image, x, y);
+    player.draw();
     requestAnimationFrame(render);
   }
 };
