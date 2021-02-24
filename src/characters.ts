@@ -1,3 +1,12 @@
+export type State = {
+  isKeyDown: {
+    arrowLeft: boolean;
+    arrowRight: boolean;
+    arrowUp: boolean;
+    arrowDown: boolean;
+  };
+};
+
 export class Character {
   ctx: CanvasRenderingContext2D;
   position: Position;
@@ -52,12 +61,15 @@ export class Position {
 }
 
 export class Player extends Character {
+  state: State;
+  speed: number = 3;
   isComing: boolean = false;
   comingStart?: number;
   comingStartPosition?: Position;
   comingEndPosition?: Position;
 
   constructor(
+    state: State,
     ctx: CanvasRenderingContext2D,
     x: number,
     y: number,
@@ -66,6 +78,7 @@ export class Player extends Character {
     image: HTMLImageElement
   ) {
     super(ctx, x, y, w, h, 0, image);
+    this.state = state;
   }
 
   update() {
@@ -89,6 +102,19 @@ export class Player extends Character {
       this.position.set(this.position.x, y);
       if (justTime % 100 < 50) {
         this.ctx.globalAlpha = 0.5;
+      }
+    } else {
+      if (this.state.isKeyDown.arrowLeft) {
+        this.position.x -= this.speed;
+      }
+      if (this.state.isKeyDown.arrowRight) {
+        this.position.x += this.speed;
+      }
+      if (this.state.isKeyDown.arrowUp) {
+        this.position.y -= this.speed;
+      }
+      if (this.state.isKeyDown.arrowDown) {
+        this.position.y += this.speed;
       }
     }
     this.draw();

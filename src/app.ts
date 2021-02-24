@@ -1,5 +1,5 @@
 import * as util from "./canvas";
-import { Player } from "./characters";
+import { Player, State } from "./characters";
 import { loadImage } from "./utils";
 import viperImage from "./assets/images/viper.png";
 
@@ -10,10 +10,19 @@ export const init = async () => {
   const CANVAS_WIDTH = 640;
   const CANVAS_HEIGHT = 480;
 
+  const state: State = {
+    isKeyDown: {
+      arrowLeft: false,
+      arrowRight: false,
+      arrowDown: false,
+      arrowUp: false,
+    },
+  };
+
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
   const ctx = canvas.getContext("2d")!;
-  const player = new Player(ctx, 0, 0, 64, 64, image);
+  const player = new Player(state, ctx, 0, 0, 64, 64, image);
   player.setComing(
     CANVAS_WIDTH / 2,
     CANVAS_HEIGHT,
@@ -22,19 +31,36 @@ export const init = async () => {
   );
 
   window.addEventListener("keydown", (event) => {
-    if (player.isComing) return;
     switch (event.key) {
       case "ArrowLeft":
-        player.position.x -= 10;
+        state.isKeyDown.arrowLeft = true;
         break;
       case "ArrowRight":
-        player.position.x += 10;
+        state.isKeyDown.arrowRight = true;
         break;
       case "ArrowUp":
-        player.position.y -= 10;
+        state.isKeyDown.arrowUp = true;
         break;
       case "ArrowDown":
-        player.position.y += 10;
+        state.isKeyDown.arrowDown = true;
+        break;
+      default:
+        break;
+    }
+  });
+  window.addEventListener("keyup", (event) => {
+    switch (event.key) {
+      case "ArrowLeft":
+        state.isKeyDown.arrowLeft = false;
+        break;
+      case "ArrowRight":
+        state.isKeyDown.arrowRight = false;
+        break;
+      case "ArrowUp":
+        state.isKeyDown.arrowUp = false;
+        break;
+      case "ArrowDown":
+        state.isKeyDown.arrowDown = false;
         break;
       default:
         break;
