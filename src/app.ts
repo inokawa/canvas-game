@@ -1,7 +1,5 @@
 import * as util from "./canvas";
-import { State } from "./characters/base";
-import { Player } from "./characters/player";
-import { Shot } from "./characters/shot";
+import { State, Player, Shot, Character } from "./characters";
 import viperImage from "./assets/images/viper.png";
 import viperShotImage from "./assets/images/viper_shot.png";
 
@@ -26,18 +24,21 @@ export const init = async () => {
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
   const ctx = canvas.getContext("2d")!;
+
+  const characters: Character[] = [];
   const player = new Player(state, ctx, 0, 0, 64, 64, viperImage);
+  characters.push(player);
   player.setComing(
     CANVAS_WIDTH / 2,
     CANVAS_HEIGHT,
     CANVAS_WIDTH / 2,
     CANVAS_HEIGHT - 100
   );
-  const shotArray: Shot[] = [];
-  for (let i = 0; i < SHOT_MAX_COUNT; ++i) {
-    shotArray[i] = new Shot(ctx, 0, 0, 32, 32, viperShotImage);
-  }
+  const shotArray: Shot[] = Array.from({ length: SHOT_MAX_COUNT }).map(
+    () => new Shot(ctx, 0, 0, 32, 32, viperShotImage)
+  );
   player.setShotArray(shotArray);
+  characters.push(...shotArray);
 
   window.addEventListener("keydown", (event) => {
     switch (event.key) {
@@ -89,8 +90,7 @@ export const init = async () => {
     ctx.globalAlpha = 1.0;
     util.drawRect(ctx, 0, 0, canvas.width, canvas.height, "#eeeeee");
 
-    player.update();
-    shotArray.forEach((c) => c.update());
+    characters.forEach((c) => c.update());
     requestAnimationFrame(render);
   }
 };

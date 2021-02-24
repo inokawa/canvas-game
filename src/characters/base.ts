@@ -64,4 +64,6 @@ export class Character {
       this.height
     );
   }
+
+  update() {}
 }
