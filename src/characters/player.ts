@@ -6,6 +6,8 @@ export class Player extends Character {
   speed: number = 3;
 
   shotArray: Shot[] = [];
+  shotCheckCounter = 0;
+  shotInterval = 10;
 
   isComing: boolean = false;
   comingStart?: number;
@@ -66,14 +68,19 @@ export class Player extends Character {
       );
 
       if (this.state.isKeyDown.z) {
-        for (let i = 0; i < this.shotArray.length; ++i) {
-          if (this.shotArray[i].life <= 0) {
-            this.shotArray[i].set(this.position.x, this.position.y);
-            break;
+        if (this.shotCheckCounter >= 0) {
+          for (let i = 0; i < this.shotArray.length; i++) {
+            if (this.shotArray[i].life <= 0) {
+              this.shotArray[i].set(this.position.x, this.position.y);
+              this.shotCheckCounter = -this.shotInterval;
+              break;
+            }
           }
         }
       }
     }
+    this.shotCheckCounter++;
+
     this.draw();
     this.ctx.globalAlpha = 1.0;
   }
