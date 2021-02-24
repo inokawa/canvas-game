@@ -116,6 +116,10 @@ export class Player extends Character {
       if (this.state.isKeyDown.arrowDown) {
         this.position.y += this.speed;
       }
+      this.position.set(
+        Math.min(Math.max(this.position.x, 0), this.ctx.canvas.width),
+        Math.min(Math.max(this.position.y, 0), this.ctx.canvas.height)
+      );
     }
     this.draw();
     this.ctx.globalAlpha = 1.0;
