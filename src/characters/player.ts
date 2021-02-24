@@ -1,68 +1,12 @@
-export type State = {
-  isKeyDown: {
-    arrowLeft: boolean;
-    arrowRight: boolean;
-    arrowUp: boolean;
-    arrowDown: boolean;
-  };
-};
-
-export class Character {
-  ctx: CanvasRenderingContext2D;
-  position: Position;
-  width: number;
-  height: number;
-  life: number;
-  image: HTMLImageElement;
-
-  constructor(
-    ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    w: number,
-    h: number,
-    life: number,
-    image: HTMLImageElement
-  ) {
-    this.ctx = ctx;
-    this.position = new Position(x, y);
-    this.width = w;
-    this.height = h;
-    this.life = life;
-    this.image = image;
-  }
-
-  draw() {
-    const offsetX = this.width / 2;
-    const offsetY = this.height / 2;
-    this.ctx.drawImage(
-      this.image,
-      this.position.x - offsetX,
-      this.position.y - offsetY,
-      this.width,
-      this.height
-    );
-  }
-}
-
-export class Position {
-  x: number;
-  y: number;
-
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-
-  set(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-}
+import { State, Character, Position } from "./base";
+import { Shot } from "./shot";
 
 export class Player extends Character {
   state: State;
   speed: number = 3;
+
+  shotArray: Shot[] = [];
+
   isComing: boolean = false;
   comingStart?: number;
   comingStartPosition?: Position;
@@ -75,9 +19,9 @@ export class Player extends Character {
     y: number,
     w: number,
     h: number,
-    image: HTMLImageElement
+    imagePath: string
   ) {
-    super(ctx, x, y, w, h, 0, image);
+    super(ctx, x, y, w, h, 0, imagePath);
     this.state = state;
   }
 
@@ -120,9 +64,22 @@ export class Player extends Character {
         Math.min(Math.max(this.position.x, 0), this.ctx.canvas.width),
         Math.min(Math.max(this.position.y, 0), this.ctx.canvas.height)
       );
+
+      if (this.state.isKeyDown.z) {
+        for (let i = 0; i < this.shotArray.length; ++i) {
+          if (this.shotArray[i].life <= 0) {
+            this.shotArray[i].set(this.position.x, this.position.y);
+            break;
+          }
+        }
+      }
     }
     this.draw();
     this.ctx.globalAlpha = 1.0;
+  }
+
+  setShotArray(shotArray: Shot[]) {
+    this.shotArray = shotArray;
   }
 
   setComing(startX: number, startY: number, endX: number, endY: number) {

@@ -1,14 +1,17 @@
 import * as util from "./canvas";
-import { Player, State } from "./characters";
-import { loadImage } from "./utils";
+import { State } from "./characters/base";
+import { Player } from "./characters/player";
+import { Shot } from "./characters/shot";
 import viperImage from "./assets/images/viper.png";
+import viperShotImage from "./assets/images/viper_shot.png";
 
 export const init = async () => {
   const canvas = document.querySelector("#screen") as HTMLCanvasElement;
-  const image = await loadImage(viperImage);
 
   const CANVAS_WIDTH = 640;
   const CANVAS_HEIGHT = 480;
+
+  const SHOT_MAX_COUNT = 10;
 
   const state: State = {
     isKeyDown: {
@@ -16,19 +19,25 @@ export const init = async () => {
       arrowRight: false,
       arrowDown: false,
       arrowUp: false,
+      z: false,
     },
   };
 
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
   const ctx = canvas.getContext("2d")!;
-  const player = new Player(state, ctx, 0, 0, 64, 64, image);
+  const player = new Player(state, ctx, 0, 0, 64, 64, viperImage);
   player.setComing(
     CANVAS_WIDTH / 2,
     CANVAS_HEIGHT,
     CANVAS_WIDTH / 2,
     CANVAS_HEIGHT - 100
   );
+  const shotArray: Shot[] = [];
+  for (let i = 0; i < SHOT_MAX_COUNT; ++i) {
+    shotArray[i] = new Shot(ctx, 0, 0, 32, 32, viperShotImage);
+  }
+  player.setShotArray(shotArray);
 
   window.addEventListener("keydown", (event) => {
     switch (event.key) {
@@ -43,6 +52,9 @@ export const init = async () => {
         break;
       case "ArrowDown":
         state.isKeyDown.arrowDown = true;
+        break;
+      case "z":
+        state.isKeyDown.z = true;
         break;
       default:
         break;
@@ -62,6 +74,9 @@ export const init = async () => {
       case "ArrowDown":
         state.isKeyDown.arrowDown = false;
         break;
+      case "z":
+        state.isKeyDown.z = false;
+        break;
       default:
         break;
     }
@@ -75,6 +90,7 @@ export const init = async () => {
     util.drawRect(ctx, 0, 0, canvas.width, canvas.height, "#eeeeee");
 
     player.update();
+    shotArray.forEach((c) => c.update());
     requestAnimationFrame(render);
   }
 };
