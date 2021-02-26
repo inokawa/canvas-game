@@ -1,8 +1,7 @@
-import { Character, Position } from "./base";
+import { Character } from "./base";
 
 export class Shot extends Character {
   speed: number;
-  vector: Position;
 
   constructor(
     ctx: CanvasRenderingContext2D,
@@ -15,7 +14,6 @@ export class Shot extends Character {
     super(ctx, x, y, w, h, imagePath, 0);
 
     this.speed = 7;
-    this.vector = new Position(0.0, -1.0);
   }
 
   set(x: number, y: number) {
