@@ -25,11 +25,21 @@ export class Position {
   }
 }
 
+export class Vector extends Position {
+  constructor(x: number, y: number) {
+    super(x, y);
+  }
+
+  setAngle(angle: number) {
+    this.set(Math.cos(angle), Math.sin(angle));
+  }
+}
+
 export class Character {
   ctx: CanvasRenderingContext2D;
   position: Position;
   angle: number;
-  vector: Position;
+  vector: Vector;
   width: number;
   height: number;
   life: number;
@@ -46,7 +56,7 @@ export class Character {
   ) {
     this.ctx = ctx;
     this.position = new Position(x, y);
-    this.vector = new Position(0.0, -1.0);
+    this.vector = new Vector(0.0, -1.0);
     this.width = w;
     this.height = h;
     this.angle = degToRad(270);
@@ -62,7 +72,7 @@ export class Character {
 
   setVectorFromAngle(angle: number) {
     this.angle = angle;
-    this.vector.set(Math.cos(angle), Math.sin(angle));
+    this.vector.setAngle(angle);
   }
 
   draw() {
