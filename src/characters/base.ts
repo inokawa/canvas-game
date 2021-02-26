@@ -28,6 +28,7 @@ export class Position {
 export class Character {
   ctx: CanvasRenderingContext2D;
   position: Position;
+  vector: Position;
   width: number;
   height: number;
   life: number;
@@ -44,12 +45,17 @@ export class Character {
   ) {
     this.ctx = ctx;
     this.position = new Position(x, y);
+    this.vector = new Position(0.0, -1.0);
     this.width = w;
     this.height = h;
     this.life = life;
     (async () => {
       this.image = await loadImage(imagePath);
     })();
+  }
+
+  setVector(x: number, y: number) {
+    this.vector.set(x, y);
   }
 
   draw() {

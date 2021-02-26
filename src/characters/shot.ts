@@ -23,10 +23,6 @@ export class Shot extends Character {
     this.life = 1;
   }
 
-  setVector(x: number, y: number) {
-    this.vector.set(x, y);
-  }
-
   update() {
     if (this.life <= 0) return;
     if (this.position.y + this.height < 0) {
