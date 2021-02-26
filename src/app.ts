@@ -4,7 +4,8 @@ import { SceneManager } from "./scene";
 import viperImage from "./assets/images/viper.png";
 import viperShotImage from "./assets/images/viper_shot.png";
 import viperSingleShotImage from "./assets/images/viper_single_shot.png";
-import enemyImageSmall from "./assets/images/enemy_small.png";
+import enemySmallImage from "./assets/images/enemy_small.png";
+import enemyShotImage from "./assets/images/enemy_shot.png";
 
 export const init = async () => {
   const canvas = document.querySelector("#screen") as HTMLCanvasElement;
@@ -14,6 +15,7 @@ export const init = async () => {
 
   const SHOT_MAX_COUNT = 10;
   const ENEMY_MAX_COUNT = 10;
+  const ENEMY_SHOT_MAX_COUNT = 50;
 
   const state: State = {
     isKeyDown: {
@@ -48,9 +50,14 @@ export const init = async () => {
   characters.push(...shotArray, ...singleShotArray);
 
   const enemyArray = Array.from({ length: ENEMY_MAX_COUNT }).map(
-    () => new Enemy(ctx, 0, 0, 48, 48, enemyImageSmall)
+    () => new Enemy(ctx, 0, 0, 48, 48, enemySmallImage)
   );
   characters.push(...enemyArray);
+  const enemyShotArray = Array.from({ length: ENEMY_SHOT_MAX_COUNT }).map(
+    () => new Shot(ctx, 0, 0, 48, 48, enemyShotImage)
+  );
+  characters.push(...enemyShotArray);
+  enemyArray.forEach((e) => e.setShotArray(enemyShotArray));
 
   const scene = new SceneManager();
   scene.add("intro", (time) => {
@@ -59,14 +66,17 @@ export const init = async () => {
     }
   });
   scene.add("invade", (time) => {
-    if (scene.frame !== 0) return;
-    for (let i = 0; i < ENEMY_MAX_COUNT; i++) {
-      if (enemyArray[i].life <= 0) {
-        const e = enemyArray[i];
-        e.set(CANVAS_WIDTH / 2, -e.height);
-        e.setVector(0.0, 1.0);
-        break;
+    if (scene.frame == 0) {
+      for (let i = 0; i < ENEMY_MAX_COUNT; i++) {
+        if (enemyArray[i].life <= 0) {
+          const e = enemyArray[i];
+          e.set(CANVAS_WIDTH / 2, -e.height, 1, "default");
+          e.setVector(0.0, 1.0);
+          break;
+        }
       }
+    } else if (scene.frame === 100) {
+      scene.use("invade");
     }
   });
   scene.use("intro");

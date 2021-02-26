@@ -21,6 +21,10 @@ export class Shot extends Character {
     this.life = 1;
   }
 
+  setSpeed(speed: number) {
+    this.speed = speed;
+  }
+
   update() {
     if (this.life <= 0) return;
     if (this.position.y + this.height < 0) {
