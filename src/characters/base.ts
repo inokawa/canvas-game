@@ -41,8 +41,8 @@ export class Character {
     y: number,
     w: number,
     h: number,
-    life: number,
-    imagePath: string
+    imagePath: string,
+    life: number = 0
   ) {
     this.ctx = ctx;
     this.position = new Position(x, y);

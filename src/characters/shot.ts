@@ -12,7 +12,7 @@ export class Shot extends Character {
     h: number,
     imagePath: string
   ) {
-    super(ctx, x, y, w, h, 0, imagePath);
+    super(ctx, x, y, w, h, imagePath, 0);
 
     this.speed = 7;
     this.vector = new Position(0.0, -1.0);

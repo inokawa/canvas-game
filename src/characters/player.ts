@@ -25,7 +25,7 @@ export class Player extends Character {
     h: number,
     imagePath: string
   ) {
-    super(ctx, x, y, w, h, 0, imagePath);
+    super(ctx, x, y, w, h, imagePath, 0);
     this.state = state;
   }
 
