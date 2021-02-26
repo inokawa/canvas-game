@@ -1,8 +1,10 @@
 import * as util from "./canvas";
-import { State, Player, Shot, Character } from "./characters";
+import { State, Player, Shot, Character, Enemy } from "./characters";
+import { SceneManager } from "./scene";
 import viperImage from "./assets/images/viper.png";
 import viperShotImage from "./assets/images/viper_shot.png";
 import viperSingleShotImage from "./assets/images/viper_single_shot.png";
+import enemyImageSmall from "./assets/images/enemy_small.png";
 
 export const init = async () => {
   const canvas = document.querySelector("#screen") as HTMLCanvasElement;
@@ -11,6 +13,7 @@ export const init = async () => {
   const CANVAS_HEIGHT = 480;
 
   const SHOT_MAX_COUNT = 10;
+  const ENEMY_MAX_COUNT = 10;
 
   const state: State = {
     isKeyDown: {
@@ -35,14 +38,38 @@ export const init = async () => {
     CANVAS_WIDTH / 2,
     CANVAS_HEIGHT - 100
   );
-  const shotArray: Shot[] = Array.from({ length: SHOT_MAX_COUNT }).map(
+  const shotArray = Array.from({ length: SHOT_MAX_COUNT }).map(
     () => new Shot(ctx, 0, 0, 32, 32, viperShotImage)
   );
-  const singleShotArray: Shot[] = Array.from({
+  const singleShotArray = Array.from({
     length: SHOT_MAX_COUNT * 2,
   }).map(() => new Shot(ctx, 0, 0, 32, 32, viperSingleShotImage));
   player.setShotArray(shotArray, singleShotArray);
   characters.push(...shotArray, ...singleShotArray);
+
+  const enemyArray = Array.from({ length: ENEMY_MAX_COUNT }).map(
+    () => new Enemy(ctx, 0, 0, 48, 48, enemyImageSmall)
+  );
+  characters.push(...enemyArray);
+
+  const scene = new SceneManager();
+  scene.add("intro", (time) => {
+    if (time > 2.0) {
+      scene.use("invade");
+    }
+  });
+  scene.add("invade", (time) => {
+    if (scene.frame !== 0) return;
+    for (let i = 0; i < ENEMY_MAX_COUNT; i++) {
+      if (enemyArray[i].life <= 0) {
+        const e = enemyArray[i];
+        e.set(CANVAS_WIDTH / 2, -e.height);
+        e.setVector(0.0, 1.0);
+        break;
+      }
+    }
+  });
+  scene.use("intro");
 
   window.addEventListener("keydown", (event) => {
     switch (event.key) {
@@ -101,6 +128,8 @@ export const init = async () => {
   function render() {
     ctx.globalAlpha = 1.0;
     util.drawRect(ctx, 0, 0, canvas.width, canvas.height, "#eeeeee");
+
+    scene.update();
 
     characters.forEach((c) => c.update());
     requestAnimationFrame(render);
