@@ -11,3 +11,17 @@ Mostly following the tutorial in [this book](https://gihyo.jp/book/2020/978-4-29
 ## Demo
 
 https://inokawa.github.io/canvas-game/
+
+| Key        | Action |
+| ---------- | ------ |
+| Arrow keys | Move   |
+| Z          | Shoot! |
+
+## Start
+
+```sh
+git clone git@github.com:inokawa/canvas-game.git
+cd canvas-game
+npm install
+npm start
+```
