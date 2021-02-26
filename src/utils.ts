@@ -7,3 +7,6 @@ export const loadImage = (url: string): Promise<HTMLImageElement> => {
     image.src = url;
   });
 };
+
+export const degToRad = (degrees: number): number =>
+  (degrees / 360) * Math.PI * 2;

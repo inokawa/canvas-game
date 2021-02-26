@@ -1,5 +1,6 @@
 import { State, Character, Position } from "./base";
 import { Shot } from "./shot";
+import { degToRad } from "../utils";
 
 export class Player extends Character {
   state: State;
@@ -82,10 +83,12 @@ export class Player extends Character {
               this.singleShotArray[i].life <= 0 &&
               this.singleShotArray[i + 1].life <= 0
             ) {
+              const radCW = degToRad(280);
+              const radCCW = degToRad(260);
               this.singleShotArray[i].set(this.position.x, this.position.y);
-              this.singleShotArray[i].setVector(0.2, -0.9);
+              this.singleShotArray[i].setVectorFromAngle(radCW);
               this.singleShotArray[i + 1].set(this.position.x, this.position.y);
-              this.singleShotArray[i + 1].setVector(-0.2, -0.9);
+              this.singleShotArray[i + 1].setVectorFromAngle(radCCW);
               this.shotCheckCounter = -this.shotInterval;
               break;
             }
