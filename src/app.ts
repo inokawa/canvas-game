@@ -245,10 +245,10 @@ export const init = async () => {
 
   function render() {
     ctx.globalAlpha = 1.0;
-    util.drawRect(ctx, 0, 0, canvas.width, canvas.height, "#eeeeee");
+    util.drawRect(ctx, 0, 0, canvas.width, canvas.height, "#111122");
 
     ctx.font = "bold 24px monospace";
-    util.drawText(ctx, state.gameScore.display(), 30, 50, "#111111");
+    util.drawText(ctx, state.gameScore.display(), 30, 50, "#ffffff");
 
     scene.update();
 
