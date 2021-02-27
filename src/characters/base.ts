@@ -54,6 +54,14 @@ export class Vector extends Position {
   }
 }
 
+export class ObjectBase {
+  update() {}
+
+  ready(): boolean {
+    return true;
+  }
+}
+
 export type CharacterOpt = {
   x?: number;
   y?: number;
@@ -62,7 +70,7 @@ export type CharacterOpt = {
   life?: number;
 };
 
-export class Character {
+export class Character extends ObjectBase {
   ctx: CanvasRenderingContext2D;
   position: Position;
   vector: Vector;
@@ -76,6 +84,7 @@ export class Character {
     imagePath: string,
     { x = 0, y = 0, w, h, life = 0 }: CharacterOpt
   ) {
+    super();
     this.ctx = ctx;
     this.position = new Position(x, y);
     this.vector = Vector.new();

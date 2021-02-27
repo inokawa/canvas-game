@@ -1,5 +1,12 @@
 import * as util from "./canvas";
-import { State, Player, Shot, Character, Enemy, Explosion } from "./characters";
+import {
+  State,
+  Player,
+  Shot,
+  Enemy,
+  Explosion,
+  ObjectBase,
+} from "./characters";
 import { SceneManager } from "./scene";
 import { array } from "./utils";
 import viperImage from "./assets/images/viper.png";
@@ -33,7 +40,7 @@ export const init = async () => {
   canvas.height = CANVAS_HEIGHT;
   const ctx = canvas.getContext("2d")!;
 
-  const characters: Character[] = [];
+  const objects: ObjectBase[] = [];
 
   const shots = array(
     SHOT_MAX_COUNT,
@@ -44,7 +51,7 @@ export const init = async () => {
     SHOT_MAX_COUNT * 2,
     () => new Shot(ctx, viperSingleShotImage, { w: 32, h: 32 })
   );
-  characters.push(...shots, ...singleShots);
+  objects.push(...shots, ...singleShots);
 
   const player = new Player(
     state,
@@ -53,7 +60,7 @@ export const init = async () => {
     { w: 64, h: 64 },
     { shot: shots, singleShot: singleShots }
   );
-  characters.push(player);
+  objects.push(player);
   player.setComing(
     CANVAS_WIDTH / 2,
     CANVAS_HEIGHT,
@@ -65,18 +72,19 @@ export const init = async () => {
     ENEMY_SHOT_MAX_COUNT,
     () => new Shot(ctx, enemyShotImage, { w: 48, h: 48 })
   );
-  characters.push(...enemyShots);
+  objects.push(...enemyShots);
 
   const enemies = array(
     ENEMY_MAX_COUNT,
     () => new Enemy(ctx, enemySmallImage, { w: 48, h: 48 }, enemyShots)
   );
-  characters.push(...enemies);
+  objects.push(...enemies);
 
   const explosions = array(
     EXPLOSION_MAX_COUNT,
     () => new Explosion(ctx, 50.0, 15, 30.0, 0.25)
   );
+  objects.push(...explosions);
 
   [...shots, ...singleShots].forEach((s) => {
     s.setTargets(enemies);
@@ -149,7 +157,7 @@ export const init = async () => {
 
   let startTime: number;
   (function wait() {
-    const isReady = characters.every((c) => c.ready());
+    const isReady = objects.every((c) => c.ready());
     if (!isReady) {
       setTimeout(wait, 100);
       return;
@@ -164,8 +172,7 @@ export const init = async () => {
 
     scene.update();
 
-    characters.forEach((c) => c.update());
-    explosions.forEach((e) => e.update());
+    objects.forEach((c) => c.update());
     requestAnimationFrame(render);
   }
 };

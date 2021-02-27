@@ -1,4 +1,4 @@
-import { Position, Vector } from "./base";
+import { ObjectBase, Position, Vector } from "./base";
 import { array } from "../utils";
 
 type Fire = {
@@ -6,7 +6,7 @@ type Fire = {
   vector: Vector;
 };
 
-export class Explosion {
+export class Explosion extends ObjectBase {
   ctx: CanvasRenderingContext2D;
   life: boolean = false;
   radius: number;
@@ -25,6 +25,7 @@ export class Explosion {
     timeRange: number,
     color: string = "#ff1166"
   ) {
+    super();
     this.ctx = ctx;
     this.radius = radius;
     this.count = count;
