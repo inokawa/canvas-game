@@ -1,5 +1,5 @@
 import { State } from "../state";
-import { loadImage } from "../utils";
+import { loadImage, dot } from "../utils";
 
 export class Position {
   x: number;
@@ -18,7 +18,7 @@ export class Position {
   distance(target: Position): number {
     const x = this.x - target.x;
     const y = this.y - target.y;
-    return Math.sqrt(x * x + y * y);
+    return dot(x, y);
   }
 }
 
@@ -31,8 +31,17 @@ export class Vector extends Position {
     return new Vector(x, y);
   }
 
+  static unit(x: number, y: number): Vector {
+    const len = this.dot(x, y);
+    return new Vector(x / len, y / len);
+  }
+
   static fromAngle(angle: number): Vector {
     return new Vector(Math.cos(angle), Math.sin(angle));
+  }
+
+  static dot(x: number, y: number): number {
+    return dot(x, y);
   }
 
   get angle(): number {

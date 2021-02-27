@@ -11,6 +11,8 @@ export const loadImage = (url: string): Promise<HTMLImageElement> => {
 export const degToRad = (degrees: number): number =>
   (degrees / 360) * Math.PI * 2;
 
+export const dot = (x: number, y: number): number => Math.sqrt(x * x + y * y);
+
 export const array = <T>(length: number, fn: () => T) =>
   Array.from({ length }).map(fn);
 

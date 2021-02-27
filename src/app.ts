@@ -2,11 +2,12 @@ import * as util from "./canvas";
 import { Player, Shot, Enemy, Explosion, ObjectBase } from "./characters";
 import { SceneManager } from "./scene";
 import { initState } from "./state";
-import { array } from "./utils";
+import { array, degToRad } from "./utils";
 import viperImage from "./assets/images/viper.png";
 import viperShotImage from "./assets/images/viper_shot.png";
 import viperSingleShotImage from "./assets/images/viper_single_shot.png";
 import enemySmallImage from "./assets/images/enemy_small.png";
+import enemyLargeImage from "./assets/images/enemy_large.png";
 import enemyShotImage from "./assets/images/enemy_shot.png";
 
 export const init = async () => {
@@ -16,7 +17,8 @@ export const init = async () => {
   const CANVAS_HEIGHT = 480;
 
   const SHOT_MAX_COUNT = 10;
-  const ENEMY_MAX_COUNT = 10;
+  const ENEMY_SMALL_MAX_COUNT = 20;
+  const ENEMY_LARGE_MAX_COUNT = 5;
   const ENEMY_SHOT_MAX_COUNT = 50;
   const EXPLOSION_MAX_COUNT = 10;
 
@@ -59,10 +61,18 @@ export const init = async () => {
   );
   objects.push(...enemyShots);
 
-  const enemies = array(
-    ENEMY_MAX_COUNT,
-    () => new Enemy(state, enemySmallImage, { w: 48, h: 48 }, enemyShots)
-  );
+  const enemies = [
+    ...array(
+      ENEMY_SMALL_MAX_COUNT,
+      () =>
+        new Enemy(state, enemySmallImage, { w: 48, h: 48 }, player, enemyShots)
+    ),
+    ...array(
+      ENEMY_LARGE_MAX_COUNT,
+      () =>
+        new Enemy(state, enemyLargeImage, { w: 64, h: 64 }, player, enemyShots)
+    ),
+  ];
   objects.push(...enemies);
 
   const explosions = array(
@@ -82,21 +92,73 @@ export const init = async () => {
 
   const scene = new SceneManager();
   scene.add("intro", (time) => {
-    if (time > 2.0) {
-      scene.use("invade");
+    if (time > 3.0) {
+      scene.use("invade_default_type");
     }
   });
-  scene.add("invade", (time) => {
-    if (scene.frame == 0) {
+  scene.add("invade_default_type", (time) => {
+    if (scene.frame % 30 == 0) {
       for (const e of enemies) {
         if (e.life <= 0) {
-          e.set(CANVAS_WIDTH / 2, -e.height, 2, "default");
-          e.setVector(0.0, 1.0);
+          if (scene.frame % 60 === 0) {
+            e.set(-e.width, 30, 2, "default");
+            e.setVectorFromAngle(degToRad(30));
+          } else {
+            e.set(CANVAS_WIDTH + e.width, 30, 2, "default");
+            e.setVectorFromAngle(degToRad(150));
+          }
           break;
         }
       }
-    } else if (scene.frame === 100) {
-      scene.use("invade");
+    }
+    if (scene.frame === 270) {
+      scene.use("blank");
+    }
+    if (player.life <= 0) {
+      scene.use("gameover");
+    }
+  });
+  scene.add("blank", (time) => {
+    if (scene.frame === 150) {
+      scene.use("invade_wave_move_type");
+    }
+    if (player.life <= 0) {
+      scene.use("gameover");
+    }
+  });
+  scene.add("invade_wave_move_type", (time) => {
+    if (scene.frame % 50 === 0) {
+      for (const e of enemies) {
+        if (e.life <= 0) {
+          if (scene.frame <= 200) {
+            e.set(CANVAS_WIDTH * 0.2, -e.height, 2, "wave");
+          } else {
+            e.set(CANVAS_WIDTH * 0.8, -e.height, 2, "wave");
+          }
+          break;
+        }
+      }
+    }
+    if (scene.frame === 450) {
+      scene.use("invade_large_type");
+    }
+    if (player.life <= 0) {
+      scene.use("gameover");
+    }
+  });
+  scene.add("invade_large_type", (time) => {
+    if (scene.frame === 100) {
+      let max = ENEMY_SMALL_MAX_COUNT + ENEMY_LARGE_MAX_COUNT;
+      for (let i = ENEMY_SMALL_MAX_COUNT; i < max; i++) {
+        if (enemies[i].life <= 0) {
+          let e = enemies[i];
+          e.set(CANVAS_WIDTH / 2, -e.height, 50, "large");
+          break;
+        }
+      }
+    }
+    if (scene.frame === 500) {
+      scene.use("intro");
     }
     if (player.life <= 0) {
       scene.use("gameover");

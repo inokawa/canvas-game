@@ -40,6 +40,8 @@ export class Shot extends Character {
   update() {
     if (this.life <= 0) return;
     if (
+      this.position.x + this.width < 0 ||
+      this.position.x - this.width > this.state.ctx.canvas.width ||
       this.position.y + this.height < 0 ||
       this.position.y - this.height > this.state.ctx.canvas.height
     ) {
@@ -64,7 +66,11 @@ export class Shot extends Character {
             }
           }
           if (t instanceof Enemy) {
-            this.state.gameScore.add(100);
+            if (t.type === "large") {
+              this.state.gameScore.add(1000);
+            } else {
+              this.state.gameScore.add(100);
+            }
           }
 
           this.life = 0;
