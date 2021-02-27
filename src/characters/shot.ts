@@ -1,7 +1,8 @@
-import { Character, CharacterOpt, State } from "./base";
+import { Character, CharacterOpt } from "./base";
 import { Enemy } from "./enemy";
 import { Explosion } from "./explosion";
 import { Player } from "./player";
+import { State } from "../state";
 
 export class Shot extends Character {
   speed: number = 7;
@@ -63,7 +64,7 @@ export class Shot extends Character {
             }
           }
           if (t instanceof Enemy) {
-            this.state.gameScore = Math.min(this.state.gameScore + 100, 99999);
+            this.state.gameScore.add(100);
           }
 
           this.life = 0;

@@ -1,5 +1,6 @@
-import { Character, CharacterOpt, State } from "./base";
+import { Character, CharacterOpt } from "./base";
 import { Shot } from "./shot";
+import { State } from "../state";
 
 const DEFAULT_ENEMY_TYPE = "default";
 

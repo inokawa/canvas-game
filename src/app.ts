@@ -1,14 +1,8 @@
 import * as util from "./canvas";
-import {
-  State,
-  Player,
-  Shot,
-  Enemy,
-  Explosion,
-  ObjectBase,
-} from "./characters";
+import { Player, Shot, Enemy, Explosion, ObjectBase } from "./characters";
 import { SceneManager } from "./scene";
-import { array, zeroPadding } from "./utils";
+import { initState } from "./state";
+import { array } from "./utils";
 import viperImage from "./assets/images/viper.png";
 import viperShotImage from "./assets/images/viper_shot.png";
 import viperSingleShotImage from "./assets/images/viper_single_shot.png";
@@ -29,17 +23,7 @@ export const init = async () => {
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
   const ctx = canvas.getContext("2d")!;
-  const state: State = {
-    ctx,
-    gameScore: 0,
-    key: {
-      arrowLeft: false,
-      arrowRight: false,
-      arrowDown: false,
-      arrowUp: false,
-      z: false,
-    },
-  };
+  const state = initState(ctx);
   let restart: boolean = false;
 
   const objects: ObjectBase[] = [];
@@ -126,7 +110,7 @@ export const init = async () => {
     util.drawText(ctx, "GAME OVER", x, CANVAS_HEIGHT / 2, "#ff0000", textWidth);
     if (restart) {
       restart = false;
-      state.gameScore = 0;
+      state.gameScore.reset();
       player.setComing(
         CANVAS_WIDTH / 2,
         CANVAS_HEIGHT + 50,
@@ -202,7 +186,7 @@ export const init = async () => {
     util.drawRect(ctx, 0, 0, canvas.width, canvas.height, "#eeeeee");
 
     ctx.font = "bold 24px monospace";
-    util.drawText(ctx, zeroPadding(state.gameScore, 5), 30, 50, "#111111");
+    util.drawText(ctx, state.gameScore.display(), 30, 50, "#111111");
 
     scene.update();
 

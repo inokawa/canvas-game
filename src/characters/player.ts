@@ -1,6 +1,7 @@
-import { State, Character, Position, CharacterOpt } from "./base";
+import { Character, Position, CharacterOpt } from "./base";
 import { Shot } from "./shot";
 import { degToRad } from "../utils";
+import { State } from "../state";
 
 export class Player extends Character {
   state: State;

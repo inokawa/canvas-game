@@ -1,16 +1,5 @@
+import { State } from "../state";
 import { loadImage } from "../utils";
-
-export type State = {
-  ctx: CanvasRenderingContext2D;
-  gameScore: number;
-  key: {
-    arrowLeft: boolean;
-    arrowRight: boolean;
-    arrowUp: boolean;
-    arrowDown: boolean;
-    z: boolean;
-  };
-};
 
 export class Position {
   x: number;
