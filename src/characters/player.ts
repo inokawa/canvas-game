@@ -6,8 +6,8 @@ export class Player extends Character {
   state: State;
   speed: number = 3;
 
-  shotArray: Shot[] = [];
-  singleShotArray: Shot[] = [];
+  shotArray: Shot[];
+  singleShotArray: Shot[];
   shotCheckCounter = 0;
   shotInterval = 10;
 
@@ -20,10 +20,19 @@ export class Player extends Character {
     state: State,
     ctx: CanvasRenderingContext2D,
     imagePath: string,
-    option: CharacterOpt
+    option: CharacterOpt,
+    {
+      shot,
+      singleShot,
+    }: {
+      shot: Shot[];
+      singleShot: Shot[];
+    }
   ) {
     super(ctx, imagePath, option);
     this.state = state;
+    this.shotArray = shot;
+    this.singleShotArray = singleShot;
   }
 
   update() {
@@ -98,11 +107,6 @@ export class Player extends Character {
 
     this.draw();
     this.ctx.globalAlpha = 1.0;
-  }
-
-  setShotArray(shotArray: Shot[], singleShotArray: Shot[]) {
-    this.shotArray = shotArray;
-    this.singleShotArray = singleShotArray;
   }
 
   setComing(startX: number, startY: number, endX: number, endY: number) {

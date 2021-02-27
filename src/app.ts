@@ -32,7 +32,22 @@ export const init = async () => {
   const ctx = canvas.getContext("2d")!;
 
   const characters: Character[] = [];
-  const player = new Player(state, ctx, viperImage, { w: 64, h: 64 });
+
+  const shotArray = Array.from({ length: SHOT_MAX_COUNT }).map(
+    () => new Shot(ctx, viperShotImage, { w: 32, h: 32 })
+  );
+  const singleShotArray = Array.from({
+    length: SHOT_MAX_COUNT * 2,
+  }).map(() => new Shot(ctx, viperSingleShotImage, { w: 32, h: 32 }));
+  characters.push(...shotArray, ...singleShotArray);
+
+  const player = new Player(
+    state,
+    ctx,
+    viperImage,
+    { w: 64, h: 64 },
+    { shot: shotArray, singleShot: singleShotArray }
+  );
   characters.push(player);
   player.setComing(
     CANVAS_WIDTH / 2,
@@ -40,24 +55,16 @@ export const init = async () => {
     CANVAS_WIDTH / 2,
     CANVAS_HEIGHT - 100
   );
-  const shotArray = Array.from({ length: SHOT_MAX_COUNT }).map(
-    () => new Shot(ctx, viperShotImage, { w: 32, h: 32 })
-  );
-  const singleShotArray = Array.from({
-    length: SHOT_MAX_COUNT * 2,
-  }).map(() => new Shot(ctx, viperSingleShotImage, { w: 32, h: 32 }));
-  player.setShotArray(shotArray, singleShotArray);
-  characters.push(...shotArray, ...singleShotArray);
 
-  const enemyArray = Array.from({ length: ENEMY_MAX_COUNT }).map(
-    () => new Enemy(ctx, enemySmallImage, { w: 48, h: 48 })
-  );
-  characters.push(...enemyArray);
   const enemyShotArray = Array.from({ length: ENEMY_SHOT_MAX_COUNT }).map(
     () => new Shot(ctx, enemyShotImage, { w: 48, h: 48 })
   );
   characters.push(...enemyShotArray);
-  enemyArray.forEach((e) => e.setShotArray(enemyShotArray));
+
+  const enemyArray = Array.from({ length: ENEMY_MAX_COUNT }).map(
+    () => new Enemy(ctx, enemySmallImage, { w: 48, h: 48 }, enemyShotArray)
+  );
+  characters.push(...enemyArray);
   [...shotArray, ...singleShotArray].forEach((s) => s.setTargets(enemyArray));
 
   const scene = new SceneManager();

@@ -7,14 +7,16 @@ export class Enemy extends Character {
   speed: number = 3;
   frame = 0;
   type: string = DEFAULT_ENEMY_TYPE;
-  shotArray: Shot[] = [];
+  shotArray: Shot[];
 
   constructor(
     ctx: CanvasRenderingContext2D,
     imagePath: string,
-    option: CharacterOpt
+    option: CharacterOpt,
+    shots: Shot[]
   ) {
     super(ctx, imagePath, option);
+    this.shotArray = shots;
   }
 
   set(
@@ -27,10 +29,6 @@ export class Enemy extends Character {
     this.life = life;
     this.type = type;
     this.frame = 0;
-  }
-
-  setShotArray(shotArray: Shot[]) {
-    this.shotArray = shotArray;
   }
 
   fire(x: number = 0.0, y: number = 1.0) {
