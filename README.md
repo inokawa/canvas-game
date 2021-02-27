@@ -2,7 +2,7 @@
 
 [![deploy](https://github.com/inokawa/canvas-game/actions/workflows/deploy.yml/badge.svg)](https://github.com/inokawa/canvas-game/actions/workflows/deploy.yml)
 
-WIP
+<img src="./example.gif" height="400px" />
 
 A toy 2D shooting game built on pure Canvas API.
 
