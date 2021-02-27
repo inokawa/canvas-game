@@ -58,6 +58,9 @@ export const init = async () => {
   );
   characters.push(...enemyShotArray);
   enemyArray.forEach((e) => e.setShotArray(enemyShotArray));
+  [...shotArray, ...singleShotArray].forEach((s) => {
+    s.setTargets(enemyArray);
+  });
 
   const scene = new SceneManager();
   scene.add("intro", (time) => {
@@ -70,7 +73,7 @@ export const init = async () => {
       for (let i = 0; i < ENEMY_MAX_COUNT; i++) {
         if (enemyArray[i].life <= 0) {
           const e = enemyArray[i];
-          e.set(CANVAS_WIDTH / 2, -e.height, 1, "default");
+          e.set(CANVAS_WIDTH / 2, -e.height, 2, "default");
           e.setVector(0.0, 1.0);
           break;
         }

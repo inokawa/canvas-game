@@ -23,6 +23,12 @@ export class Position {
     this.x = x;
     this.y = y;
   }
+
+  distance(target: Position): number {
+    const x = this.x - target.x;
+    const y = this.y - target.y;
+    return Math.sqrt(x * x + y * y);
+  }
 }
 
 export class Vector extends Position {

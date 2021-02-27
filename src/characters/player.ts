@@ -74,6 +74,7 @@ export class Player extends Character {
           for (let i = 0; i < this.shotArray.length; i++) {
             if (this.shotArray[i].life <= 0) {
               this.shotArray[i].set(this.position.x, this.position.y);
+              this.shotArray[i].setPower(2);
               this.shotCheckCounter = -this.shotInterval;
               break;
             }

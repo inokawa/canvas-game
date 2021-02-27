@@ -1,7 +1,9 @@
 import { Character } from "./base";
 
 export class Shot extends Character {
-  speed: number;
+  speed: number = 7;
+  power: number = 1;
+  targetArray: Character[] = [];
 
   constructor(
     ctx: CanvasRenderingContext2D,
@@ -12,8 +14,6 @@ export class Shot extends Character {
     imagePath: string
   ) {
     super(ctx, x, y, w, h, imagePath, 0);
-
-    this.speed = 7;
   }
 
   set(x: number, y: number) {
@@ -22,16 +22,40 @@ export class Shot extends Character {
   }
 
   setSpeed(speed: number) {
+    if (speed <= 0) return;
     this.speed = speed;
+  }
+
+  setPower(power: number) {
+    if (power <= 0) return;
+    this.power = power;
+  }
+
+  setTargets(targets: Character[]) {
+    this.targetArray = targets;
   }
 
   update() {
     if (this.life <= 0) return;
-    if (this.position.y + this.height < 0) {
+    if (
+      this.position.y + this.height < 0 ||
+      this.position.y - this.height > this.ctx.canvas.height
+    ) {
       this.life = 0;
     }
     this.position.x += this.vector.x * this.speed;
     this.position.y += this.vector.y * this.speed;
+
+    if (this.life > 0) {
+      this.targetArray.forEach((t) => {
+        if (t.life <= 0) return;
+        const dist = this.position.distance(t.position);
+        if (dist <= (this.width + t.width) / 4) {
+          t.life -= this.power;
+          this.life = 0;
+        }
+      });
+    }
     this.rotationDraw();
   }
 }
