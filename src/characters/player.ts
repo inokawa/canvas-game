@@ -1,4 +1,4 @@
-import { State, Character, Position, Option } from "./base";
+import { State, Character, Position, CharacterOpt } from "./base";
 import { Shot } from "./shot";
 import { degToRad } from "../utils";
 
@@ -20,7 +20,7 @@ export class Player extends Character {
     state: State,
     ctx: CanvasRenderingContext2D,
     imagePath: string,
-    option: Option
+    option: CharacterOpt
   ) {
     super(ctx, imagePath, option);
     this.state = state;

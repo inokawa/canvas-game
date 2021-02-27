@@ -1,4 +1,4 @@
-import { Character, Option } from "./base";
+import { Character, CharacterOpt } from "./base";
 
 export class Shot extends Character {
   speed: number = 7;
@@ -8,7 +8,7 @@ export class Shot extends Character {
   constructor(
     ctx: CanvasRenderingContext2D,
     imagePath: string,
-    option: Option
+    option: CharacterOpt
   ) {
     super(ctx, imagePath, option);
   }
