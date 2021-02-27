@@ -82,7 +82,7 @@ export const init = async () => {
 
   const explosions = array(
     EXPLOSION_MAX_COUNT,
-    () => new Explosion(ctx, 50.0, 15, 30.0, 0.25)
+    () => new Explosion(ctx, 100.0, 15, 40.0, 1.0)
   );
   objects.push(...explosions);
 

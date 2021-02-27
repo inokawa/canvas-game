@@ -1,5 +1,5 @@
 import { ObjectBase, Position, Vector } from "./base";
-import { array } from "../utils";
+import { array, easeOut } from "../utils";
 
 type Fire = {
   position: Position;
@@ -51,7 +51,8 @@ export class Explosion extends ObjectBase {
     this.ctx.globalAlpha = 0.5;
 
     const time = (Date.now() - this.startTime) / 1000;
-    const progress = Math.min(time / this.timeRange, 1.0);
+    const ease = easeOut(Math.min(time / this.timeRange, 1.0));
+    const progress = 1.0 - ease;
     const s = 1.0 - progress;
     for (const f of this.fires) {
       const d = this.radius * progress;
