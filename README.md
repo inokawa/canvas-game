@@ -16,6 +16,7 @@ https://inokawa.github.io/canvas-game/
 | ---------- | ------ |
 | Arrow keys | Move   |
 | Z          | Shoot! |
+| Enter      | Retry  |
 
 ## Start
 

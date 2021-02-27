@@ -35,6 +35,7 @@ export const init = async () => {
       z: false,
     },
   };
+  let restart: boolean = false;
 
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
@@ -113,6 +114,26 @@ export const init = async () => {
     } else if (scene.frame === 100) {
       scene.use("invade");
     }
+    if (player.life <= 0) {
+      scene.use("gameover");
+    }
+  });
+  scene.add("gameover", (time) => {
+    const textWidth = CANVAS_WIDTH / 2;
+    const loopWidth = CANVAS_WIDTH + textWidth;
+    const x = CANVAS_WIDTH - ((scene.frame * 2) % loopWidth);
+    ctx.font = "bold 72px sans-serif";
+    util.drawText(ctx, "GAME OVER", x, CANVAS_HEIGHT / 2, "#ff0000", textWidth);
+    if (restart) {
+      restart = false;
+      player.setComing(
+        CANVAS_WIDTH / 2,
+        CANVAS_HEIGHT + 50,
+        CANVAS_WIDTH / 2,
+        CANVAS_HEIGHT - 100
+      );
+      scene.use("intro");
+    }
   });
   scene.use("intro");
 
@@ -132,6 +153,11 @@ export const init = async () => {
         break;
       case "z":
         state.key.z = true;
+        break;
+      case "Enter":
+        if (player.life <= 0) {
+          restart = true;
+        }
         break;
       default:
         break;
