@@ -9,6 +9,7 @@ import viperSingleShotImage from "./assets/images/viper_single_shot.png";
 import enemySmallImage from "./assets/images/enemy_small.png";
 import enemyLargeImage from "./assets/images/enemy_large.png";
 import enemyShotImage from "./assets/images/enemy_shot.png";
+import { BackgroundStar } from "./characters/background";
 
 export const init = async () => {
   const canvas = document.querySelector("#screen") as HTMLCanvasElement;
@@ -21,6 +22,10 @@ export const init = async () => {
   const ENEMY_LARGE_MAX_COUNT = 5;
   const ENEMY_SHOT_MAX_COUNT = 50;
   const EXPLOSION_MAX_COUNT = 10;
+
+  const BACKGROUND_STAR_MAX_COUNT = 100;
+  const BACKGROUND_STAR_MAX_SIZE = 3;
+  const BACKGROUND_STAR_MAX_SPEED = 4;
 
   canvas.width = CANVAS_WIDTH;
   canvas.height = CANVAS_HEIGHT;
@@ -89,6 +94,15 @@ export const init = async () => {
     s.setTargets([player]);
     s.setExplosions(explosions);
   });
+
+  const backgroundStars = array(BACKGROUND_STAR_MAX_COUNT, () => {
+    const size = 1 + Math.random() * (BACKGROUND_STAR_MAX_SIZE - 1);
+    const speed = 1 + Math.random() * (BACKGROUND_STAR_MAX_SPEED - 1);
+    const star = new BackgroundStar(state, size, speed);
+    star.set(Math.random() * CANVAS_WIDTH, Math.random() * CANVAS_HEIGHT);
+    return star;
+  });
+  objects.push(...backgroundStars);
 
   const scene = new SceneManager();
   scene.add("intro", (time) => {
