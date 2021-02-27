@@ -36,6 +36,14 @@ export class Vector extends Position {
     super(x, y);
   }
 
+  static new(x: number = 0.0, y: number = -1.0): Vector {
+    return new Vector(x, y);
+  }
+
+  static fromAngle(angle: number): Vector {
+    return new Vector(Math.cos(angle), Math.sin(angle));
+  }
+
   setAngle(angle: number) {
     this.set(Math.cos(angle), Math.sin(angle));
   }
@@ -66,7 +74,7 @@ export class Character {
   ) {
     this.ctx = ctx;
     this.position = new Position(x, y);
-    this.vector = new Vector(0.0, -1.0);
+    this.vector = Vector.new();
     this.width = w;
     this.height = h;
     this.angle = degToRad(270);
