@@ -1,4 +1,4 @@
-import { Character, Position, CharacterOpt } from "./base";
+import { Character, Vector, CharacterOpt } from "./base";
 import { Shot } from "./shot";
 import { degToRad } from "../utils";
 import { State } from "../state";
@@ -14,8 +14,8 @@ export class Player extends Character {
 
   isComing: boolean = false;
   comingStart?: number;
-  comingStartPosition?: Position;
-  comingEndPosition?: Position;
+  comingStartPosition?: Vector;
+  comingEndPosition?: Vector;
 
   constructor(
     state: State,
@@ -115,7 +115,7 @@ export class Player extends Character {
     this.isComing = true;
     this.comingStart = Date.now();
     this.position.set(startX, startY);
-    this.comingStartPosition = new Position(startX, startY);
-    this.comingEndPosition = new Position(endX, endY);
+    this.comingStartPosition = new Vector(startX, startY);
+    this.comingEndPosition = new Vector(endX, endY);
   }
 }

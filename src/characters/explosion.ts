@@ -1,8 +1,8 @@
-import { ObjectBase, Position, Vector } from "./base";
+import { ObjectBase, Vector } from "./base";
 import { array, easeOut } from "../utils";
 
 type Fire = {
-  position: Position;
+  position: Vector;
   vector: Vector;
   size: number;
 };
@@ -37,7 +37,7 @@ export class Explosion extends ObjectBase {
 
   set(x: number, y: number) {
     this.fires = array(this.count, () => ({
-      position: new Position(x, y),
+      position: new Vector(x, y),
       vector: Vector.fromAngle(Math.random() * Math.PI * 2.0),
       size: (Math.random() * 0.5 + 0.5) * this.size,
     }));

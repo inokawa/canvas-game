@@ -1,12 +1,12 @@
 import { State } from "../state";
-import { ObjectBase, Position } from "./base";
+import { ObjectBase, Vector } from "./base";
 
 export class BackgroundStar extends ObjectBase {
   state: State;
   size: number;
   speed: number;
   color: string;
-  position: Position = new Position(0, 0);
+  position: Vector = new Vector(0, 0);
 
   constructor(state: State, size: number, speed: number, color = "#ffffff") {
     super();

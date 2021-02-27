@@ -1,7 +1,7 @@
 import { State } from "../state";
 import { loadImage, dot } from "../utils";
 
-export class Position {
+export class Vector {
   x: number;
   y: number;
 
@@ -13,18 +13,6 @@ export class Position {
   set(x: number, y: number) {
     this.x = x;
     this.y = y;
-  }
-
-  distance(target: Position): number {
-    const x = this.x - target.x;
-    const y = this.y - target.y;
-    return dot(x, y);
-  }
-}
-
-export class Vector extends Position {
-  constructor(x: number, y: number) {
-    super(x, y);
   }
 
   static new(x: number = 0.0, y: number = -1.0): Vector {
@@ -52,6 +40,23 @@ export class Vector extends Position {
   setAngle(angle: number) {
     this.set(Math.cos(angle), Math.sin(angle));
   }
+
+  distance(target: Vector): number {
+    const x = this.x - target.x;
+    const y = this.y - target.y;
+    return Vector.dot(x, y);
+  }
+
+  cross(target: Vector): number {
+    return this.x * target.y - this.y * target.x;
+  }
+
+  rotate(radian: number) {
+    let s = Math.sin(radian);
+    let c = Math.cos(radian);
+    this.x = this.x * c + this.y * -s;
+    this.y = this.x * s + this.y * c;
+  }
 }
 
 export class ObjectBase {
@@ -72,7 +77,7 @@ export type CharacterOpt = {
 
 export class Character extends ObjectBase {
   state: State;
-  position: Position;
+  position: Vector;
   vector: Vector;
   width: number;
   height: number;
@@ -86,7 +91,7 @@ export class Character extends ObjectBase {
   ) {
     super();
     this.state = state;
-    this.position = new Position(x, y);
+    this.position = new Vector(x, y);
     this.vector = Vector.new();
     this.width = w;
     this.height = h;

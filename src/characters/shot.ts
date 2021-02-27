@@ -1,5 +1,5 @@
 import { Character, CharacterOpt } from "./base";
-import { Enemy } from "./enemy";
+import { Enemy } from "./enemies";
 import { Explosion } from "./explosion";
 import { Player } from "./player";
 import { State } from "../state";
