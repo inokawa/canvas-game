@@ -36,6 +36,7 @@ export class Player extends Character {
   }
 
   update() {
+    if (this.life <= 0) return;
     if (
       !this.comingStart ||
       !this.comingStartPosition ||
@@ -110,6 +111,7 @@ export class Player extends Character {
   }
 
   setComing(startX: number, startY: number, endX: number, endY: number) {
+    this.life = 1;
     this.isComing = true;
     this.comingStart = Date.now();
     this.position.set(startX, startY);

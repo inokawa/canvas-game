@@ -90,6 +90,10 @@ export const init = async () => {
     s.setTargets(enemies);
     s.setExplosions(explosions);
   });
+  enemyShots.forEach((s) => {
+    s.setTargets([player]);
+    s.setExplosions(explosions);
+  });
 
   const scene = new SceneManager();
   scene.add("intro", (time) => {

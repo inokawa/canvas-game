@@ -1,5 +1,6 @@
 import { Character, CharacterOpt } from "./base";
 import { Explosion } from "./explosion";
+import { Player } from "./player";
 
 export class Shot extends Character {
   speed: number = 7;
@@ -54,6 +55,7 @@ export class Shot extends Character {
         if (t.life <= 0) return;
         const dist = this.position.distance(t.position);
         if (dist <= (this.width + t.width) / 4) {
+          if (t instanceof Player && t.isComing) return;
           t.life -= this.power;
           if (t.life <= 0) {
             for (const e of this.explosionArray) {
