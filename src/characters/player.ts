@@ -58,16 +58,16 @@ export class Player extends Character {
         this.ctx.globalAlpha = 0.5;
       }
     } else {
-      if (this.state.isKeyDown.arrowLeft) {
+      if (this.state.key.arrowLeft) {
         this.position.x -= this.speed;
       }
-      if (this.state.isKeyDown.arrowRight) {
+      if (this.state.key.arrowRight) {
         this.position.x += this.speed;
       }
-      if (this.state.isKeyDown.arrowUp) {
+      if (this.state.key.arrowUp) {
         this.position.y -= this.speed;
       }
-      if (this.state.isKeyDown.arrowDown) {
+      if (this.state.key.arrowDown) {
         this.position.y += this.speed;
       }
       this.position.set(
@@ -75,7 +75,7 @@ export class Player extends Character {
         Math.min(Math.max(this.position.y, 0), this.ctx.canvas.height)
       );
 
-      if (this.state.isKeyDown.z) {
+      if (this.state.key.z) {
         if (this.shotCheckCounter >= 0) {
           for (const s of this.shotArray) {
             if (s.life <= 0) {

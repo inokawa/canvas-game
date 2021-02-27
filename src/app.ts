@@ -27,7 +27,7 @@ export const init = async () => {
   const EXPLOSION_MAX_COUNT = 10;
 
   const state: State = {
-    isKeyDown: {
+    key: {
       arrowLeft: false,
       arrowRight: false,
       arrowDown: false,
@@ -115,19 +115,19 @@ export const init = async () => {
   window.addEventListener("keydown", (event) => {
     switch (event.key) {
       case "ArrowLeft":
-        state.isKeyDown.arrowLeft = true;
+        state.key.arrowLeft = true;
         break;
       case "ArrowRight":
-        state.isKeyDown.arrowRight = true;
+        state.key.arrowRight = true;
         break;
       case "ArrowUp":
-        state.isKeyDown.arrowUp = true;
+        state.key.arrowUp = true;
         break;
       case "ArrowDown":
-        state.isKeyDown.arrowDown = true;
+        state.key.arrowDown = true;
         break;
       case "z":
-        state.isKeyDown.z = true;
+        state.key.z = true;
         break;
       default:
         break;
@@ -136,19 +136,19 @@ export const init = async () => {
   window.addEventListener("keyup", (event) => {
     switch (event.key) {
       case "ArrowLeft":
-        state.isKeyDown.arrowLeft = false;
+        state.key.arrowLeft = false;
         break;
       case "ArrowRight":
-        state.isKeyDown.arrowRight = false;
+        state.key.arrowRight = false;
         break;
       case "ArrowUp":
-        state.isKeyDown.arrowUp = false;
+        state.key.arrowUp = false;
         break;
       case "ArrowDown":
-        state.isKeyDown.arrowDown = false;
+        state.key.arrowDown = false;
         break;
       case "z":
-        state.isKeyDown.z = false;
+        state.key.z = false;
         break;
       default:
         break;

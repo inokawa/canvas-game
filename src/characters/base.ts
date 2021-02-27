@@ -1,7 +1,7 @@
 import { loadImage } from "../utils";
 
 export type State = {
-  isKeyDown: {
+  key: {
     arrowLeft: boolean;
     arrowRight: boolean;
     arrowUp: boolean;
