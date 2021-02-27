@@ -1,4 +1,4 @@
-import { Character } from "./base";
+import { Character, Option } from "./base";
 import { Shot } from "./shot";
 
 const DEFAULT_ENEMY_TYPE = "default";
@@ -11,13 +11,10 @@ export class Enemy extends Character {
 
   constructor(
     ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    w: number,
-    h: number,
-    imagePath: string
+    imagePath: string,
+    option: Option
   ) {
-    super(ctx, x, y, w, h, imagePath, 0);
+    super(ctx, imagePath, option);
   }
 
   set(

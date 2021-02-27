@@ -41,6 +41,14 @@ export class Vector extends Position {
   }
 }
 
+export type Option = {
+  x?: number;
+  y?: number;
+  w: number;
+  h: number;
+  life?: number;
+};
+
 export class Character {
   ctx: CanvasRenderingContext2D;
   position: Position;
@@ -53,12 +61,8 @@ export class Character {
 
   constructor(
     ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    w: number,
-    h: number,
     imagePath: string,
-    life: number = 0
+    { x = 0, y = 0, w, h, life = 0 }: Option
   ) {
     this.ctx = ctx;
     this.position = new Position(x, y);

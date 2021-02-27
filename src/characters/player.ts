@@ -1,4 +1,4 @@
-import { State, Character, Position } from "./base";
+import { State, Character, Position, Option } from "./base";
 import { Shot } from "./shot";
 import { degToRad } from "../utils";
 
@@ -19,13 +19,10 @@ export class Player extends Character {
   constructor(
     state: State,
     ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number,
-    w: number,
-    h: number,
-    imagePath: string
+    imagePath: string,
+    option: Option
   ) {
-    super(ctx, x, y, w, h, imagePath, 0);
+    super(ctx, imagePath, option);
     this.state = state;
   }
 
