@@ -1,4 +1,4 @@
-import { loadImage, degToRad } from "../utils";
+import { loadImage } from "../utils";
 
 export type State = {
   isKeyDown: {
@@ -44,6 +44,11 @@ export class Vector extends Position {
     return new Vector(Math.cos(angle), Math.sin(angle));
   }
 
+  get angle(): number {
+    const asin = Math.asin(this.y);
+    return this.x >= 0 ? asin : Math.PI - asin;
+  }
+
   setAngle(angle: number) {
     this.set(Math.cos(angle), Math.sin(angle));
   }
@@ -60,7 +65,6 @@ export type CharacterOpt = {
 export class Character {
   ctx: CanvasRenderingContext2D;
   position: Position;
-  angle: number;
   vector: Vector;
   width: number;
   height: number;
@@ -77,7 +81,6 @@ export class Character {
     this.vector = Vector.new();
     this.width = w;
     this.height = h;
-    this.angle = degToRad(270);
     this.life = life;
     (async () => {
       this.image = await loadImage(imagePath);
@@ -89,7 +92,6 @@ export class Character {
   }
 
   setVectorFromAngle(angle: number) {
-    this.angle = angle;
     this.vector.setAngle(angle);
   }
 
@@ -110,7 +112,7 @@ export class Character {
     if (!this.image) return;
     this.ctx.save();
     this.ctx.translate(this.position.x, this.position.y);
-    this.ctx.rotate(this.angle - Math.PI * 1.5);
+    this.ctx.rotate(this.vector.angle - Math.PI * 1.5);
 
     const offsetX = this.width / 2;
     const offsetY = this.height / 2;
