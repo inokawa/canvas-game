@@ -1,6 +1,7 @@
 import * as util from "./canvas";
 import { State, Player, Shot, Character, Enemy } from "./characters";
 import { SceneManager } from "./scene";
+import { array } from "./utils";
 import viperImage from "./assets/images/viper.png";
 import viperShotImage from "./assets/images/viper_shot.png";
 import viperSingleShotImage from "./assets/images/viper_single_shot.png";
@@ -33,12 +34,15 @@ export const init = async () => {
 
   const characters: Character[] = [];
 
-  const shots = Array.from({ length: SHOT_MAX_COUNT }).map(
+  const shots = array(
+    SHOT_MAX_COUNT,
     () => new Shot(ctx, viperShotImage, { w: 32, h: 32 })
   );
-  const singleShots = Array.from({
-    length: SHOT_MAX_COUNT * 2,
-  }).map(() => new Shot(ctx, viperSingleShotImage, { w: 32, h: 32 }));
+
+  const singleShots = array(
+    SHOT_MAX_COUNT * 2,
+    () => new Shot(ctx, viperSingleShotImage, { w: 32, h: 32 })
+  );
   characters.push(...shots, ...singleShots);
 
   const player = new Player(
@@ -56,12 +60,14 @@ export const init = async () => {
     CANVAS_HEIGHT - 100
   );
 
-  const enemyShots = Array.from({ length: ENEMY_SHOT_MAX_COUNT }).map(
+  const enemyShots = array(
+    ENEMY_SHOT_MAX_COUNT,
     () => new Shot(ctx, enemyShotImage, { w: 48, h: 48 })
   );
   characters.push(...enemyShots);
 
-  const enemies = Array.from({ length: ENEMY_MAX_COUNT }).map(
+  const enemies = array(
+    ENEMY_MAX_COUNT,
     () => new Enemy(ctx, enemySmallImage, { w: 48, h: 48 }, enemyShots)
   );
   characters.push(...enemies);
