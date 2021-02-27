@@ -24,7 +24,7 @@ export type State = {
   };
 };
 
-export class GameScore {
+class GameScore {
   score: number = 0;
 
   add(num: number) {
