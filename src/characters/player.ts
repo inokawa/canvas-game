@@ -77,10 +77,10 @@ export class Player extends Character {
 
       if (this.state.isKeyDown.z) {
         if (this.shotCheckCounter >= 0) {
-          for (let i = 0; i < this.shotArray.length; i++) {
-            if (this.shotArray[i].life <= 0) {
-              this.shotArray[i].set(this.position.x, this.position.y);
-              this.shotArray[i].setPower(2);
+          for (const s of this.shotArray) {
+            if (s.life <= 0) {
+              s.set(this.position.x, this.position.y);
+              s.setPower(2);
               this.shotCheckCounter = -this.shotInterval;
               break;
             }

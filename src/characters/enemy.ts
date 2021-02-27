@@ -32,11 +32,11 @@ export class Enemy extends Character {
   }
 
   fire(x: number = 0.0, y: number = 1.0) {
-    for (let i = 0; i < this.shotArray.length; i++) {
-      if (this.shotArray[i].life <= 0) {
-        this.shotArray[i].set(this.position.x, this.position.y);
-        this.shotArray[i].setSpeed(5.0);
-        this.shotArray[i].setVector(x, y);
+    for (const s of this.shotArray) {
+      if (s.life <= 0) {
+        s.set(this.position.x, this.position.y);
+        s.setSpeed(5.0);
+        s.setVector(x, y);
         break;
       }
     }

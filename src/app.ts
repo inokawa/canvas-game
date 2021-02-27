@@ -81,9 +81,8 @@ export const init = async () => {
   });
   scene.add("invade", (time) => {
     if (scene.frame == 0) {
-      for (let i = 0; i < ENEMY_MAX_COUNT; i++) {
-        if (enemies[i].life <= 0) {
-          const e = enemies[i];
+      for (const e of enemies) {
+        if (e.life <= 0) {
           e.set(CANVAS_WIDTH / 2, -e.height, 2, "default");
           e.setVector(0.0, 1.0);
           break;
