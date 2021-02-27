@@ -1,6 +1,8 @@
 import { loadImage } from "../utils";
 
 export type State = {
+  ctx: CanvasRenderingContext2D;
+  gameScore: number;
   key: {
     arrowLeft: boolean;
     arrowRight: boolean;
@@ -71,7 +73,7 @@ export type CharacterOpt = {
 };
 
 export class Character extends ObjectBase {
-  ctx: CanvasRenderingContext2D;
+  state: State;
   position: Position;
   vector: Vector;
   width: number;
@@ -80,12 +82,12 @@ export class Character extends ObjectBase {
   image?: HTMLImageElement;
 
   constructor(
-    ctx: CanvasRenderingContext2D,
+    state: State,
     imagePath: string,
     { x = 0, y = 0, w, h, life = 0 }: CharacterOpt
   ) {
     super();
-    this.ctx = ctx;
+    this.state = state;
     this.position = new Position(x, y);
     this.vector = Vector.new();
     this.width = w;
@@ -108,7 +110,7 @@ export class Character extends ObjectBase {
     if (!this.image) return;
     const offsetX = this.width / 2;
     const offsetY = this.height / 2;
-    this.ctx.drawImage(
+    this.state.ctx.drawImage(
       this.image,
       this.position.x - offsetX,
       this.position.y - offsetY,
@@ -119,15 +121,21 @@ export class Character extends ObjectBase {
 
   rotationDraw() {
     if (!this.image) return;
-    this.ctx.save();
-    this.ctx.translate(this.position.x, this.position.y);
-    this.ctx.rotate(this.vector.angle - Math.PI * 1.5);
+    this.state.ctx.save();
+    this.state.ctx.translate(this.position.x, this.position.y);
+    this.state.ctx.rotate(this.vector.angle - Math.PI * 1.5);
 
     const offsetX = this.width / 2;
     const offsetY = this.height / 2;
-    this.ctx.drawImage(this.image, -offsetX, -offsetY, this.width, this.height);
+    this.state.ctx.drawImage(
+      this.image,
+      -offsetX,
+      -offsetY,
+      this.width,
+      this.height
+    );
 
-    this.ctx.restore();
+    this.state.ctx.restore();
   }
 
   update() {}

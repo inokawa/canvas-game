@@ -8,7 +8,7 @@ import {
   ObjectBase,
 } from "./characters";
 import { SceneManager } from "./scene";
-import { array } from "./utils";
+import { array, zeroPadding } from "./utils";
 import viperImage from "./assets/images/viper.png";
 import viperShotImage from "./assets/images/viper_shot.png";
 import viperSingleShotImage from "./assets/images/viper_single_shot.png";
@@ -26,7 +26,12 @@ export const init = async () => {
   const ENEMY_SHOT_MAX_COUNT = 50;
   const EXPLOSION_MAX_COUNT = 10;
 
+  canvas.width = CANVAS_WIDTH;
+  canvas.height = CANVAS_HEIGHT;
+  const ctx = canvas.getContext("2d")!;
   const state: State = {
+    ctx,
+    gameScore: 0,
     key: {
       arrowLeft: false,
       arrowRight: false,
@@ -37,26 +42,21 @@ export const init = async () => {
   };
   let restart: boolean = false;
 
-  canvas.width = CANVAS_WIDTH;
-  canvas.height = CANVAS_HEIGHT;
-  const ctx = canvas.getContext("2d")!;
-
   const objects: ObjectBase[] = [];
 
   const shots = array(
     SHOT_MAX_COUNT,
-    () => new Shot(ctx, viperShotImage, { w: 32, h: 32 })
+    () => new Shot(state, viperShotImage, { w: 32, h: 32 })
   );
 
   const singleShots = array(
     SHOT_MAX_COUNT * 2,
-    () => new Shot(ctx, viperSingleShotImage, { w: 32, h: 32 })
+    () => new Shot(state, viperSingleShotImage, { w: 32, h: 32 })
   );
   objects.push(...shots, ...singleShots);
 
   const player = new Player(
     state,
-    ctx,
     viperImage,
     { w: 64, h: 64 },
     { shot: shots, singleShot: singleShots }
@@ -71,13 +71,13 @@ export const init = async () => {
 
   const enemyShots = array(
     ENEMY_SHOT_MAX_COUNT,
-    () => new Shot(ctx, enemyShotImage, { w: 48, h: 48 })
+    () => new Shot(state, enemyShotImage, { w: 48, h: 48 })
   );
   objects.push(...enemyShots);
 
   const enemies = array(
     ENEMY_MAX_COUNT,
-    () => new Enemy(ctx, enemySmallImage, { w: 48, h: 48 }, enemyShots)
+    () => new Enemy(state, enemySmallImage, { w: 48, h: 48 }, enemyShots)
   );
   objects.push(...enemies);
 
@@ -126,6 +126,7 @@ export const init = async () => {
     util.drawText(ctx, "GAME OVER", x, CANVAS_HEIGHT / 2, "#ff0000", textWidth);
     if (restart) {
       restart = false;
+      state.gameScore = 0;
       player.setComing(
         CANVAS_WIDTH / 2,
         CANVAS_HEIGHT + 50,
@@ -199,6 +200,9 @@ export const init = async () => {
   function render() {
     ctx.globalAlpha = 1.0;
     util.drawRect(ctx, 0, 0, canvas.width, canvas.height, "#eeeeee");
+
+    ctx.font = "bold 24px monospace";
+    util.drawText(ctx, zeroPadding(state.gameScore, 5), 30, 50, "#111111");
 
     scene.update();
 

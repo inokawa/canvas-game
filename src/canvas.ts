@@ -18,7 +18,7 @@ export const drawText = (
   x: number,
   y: number,
   color: string,
-  width: number
+  width?: number
 ) => {
   if (color != null) {
     context.fillStyle = color;

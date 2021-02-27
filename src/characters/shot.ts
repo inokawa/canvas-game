@@ -1,4 +1,5 @@
-import { Character, CharacterOpt } from "./base";
+import { Character, CharacterOpt, State } from "./base";
+import { Enemy } from "./enemy";
 import { Explosion } from "./explosion";
 import { Player } from "./player";
 
@@ -8,12 +9,8 @@ export class Shot extends Character {
   targetArray: Character[] = [];
   explosionArray: Explosion[] = [];
 
-  constructor(
-    ctx: CanvasRenderingContext2D,
-    imagePath: string,
-    option: CharacterOpt
-  ) {
-    super(ctx, imagePath, option);
+  constructor(state: State, imagePath: string, option: CharacterOpt) {
+    super(state, imagePath, option);
   }
 
   set(x: number, y: number) {
@@ -43,7 +40,7 @@ export class Shot extends Character {
     if (this.life <= 0) return;
     if (
       this.position.y + this.height < 0 ||
-      this.position.y - this.height > this.ctx.canvas.height
+      this.position.y - this.height > this.state.ctx.canvas.height
     ) {
       this.life = 0;
     }
@@ -64,6 +61,9 @@ export class Shot extends Character {
                 break;
               }
             }
+          }
+          if (t instanceof Enemy) {
+            this.state.gameScore = Math.min(this.state.gameScore + 100, 99999);
           }
 
           this.life = 0;

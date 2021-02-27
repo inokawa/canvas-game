@@ -18,7 +18,6 @@ export class Player extends Character {
 
   constructor(
     state: State,
-    ctx: CanvasRenderingContext2D,
     imagePath: string,
     option: CharacterOpt,
     {
@@ -29,7 +28,7 @@ export class Player extends Character {
       singleShot: Shot[];
     }
   ) {
-    super(ctx, imagePath, option);
+    super(state, imagePath, option);
     this.state = state;
     this.shotArray = shot;
     this.singleShotArray = singleShot;
@@ -56,7 +55,7 @@ export class Player extends Character {
 
       this.position.set(this.position.x, y);
       if (justTime % 100 < 50) {
-        this.ctx.globalAlpha = 0.5;
+        this.state.ctx.globalAlpha = 0.5;
       }
     } else {
       if (this.state.key.arrowLeft) {
@@ -72,8 +71,8 @@ export class Player extends Character {
         this.position.y += this.speed;
       }
       this.position.set(
-        Math.min(Math.max(this.position.x, 0), this.ctx.canvas.width),
-        Math.min(Math.max(this.position.y, 0), this.ctx.canvas.height)
+        Math.min(Math.max(this.position.x, 0), this.state.ctx.canvas.width),
+        Math.min(Math.max(this.position.y, 0), this.state.ctx.canvas.height)
       );
 
       if (this.state.key.z) {
@@ -107,7 +106,7 @@ export class Player extends Character {
     this.shotCheckCounter++;
 
     this.draw();
-    this.ctx.globalAlpha = 1.0;
+    this.state.ctx.globalAlpha = 1.0;
   }
 
   setComing(startX: number, startY: number, endX: number, endY: number) {

@@ -1,4 +1,4 @@
-import { Character, CharacterOpt } from "./base";
+import { Character, CharacterOpt, State } from "./base";
 import { Shot } from "./shot";
 
 const DEFAULT_ENEMY_TYPE = "default";
@@ -10,12 +10,12 @@ export class Enemy extends Character {
   shotArray: Shot[];
 
   constructor(
-    ctx: CanvasRenderingContext2D,
+    state: State,
     imagePath: string,
     option: CharacterOpt,
     shots: Shot[]
   ) {
-    super(ctx, imagePath, option);
+    super(state, imagePath, option);
     this.shotArray = shots;
   }
 
@@ -50,7 +50,7 @@ export class Enemy extends Character {
         if (this.frame == 50) {
           this.fire();
         }
-        if (this.position.y - this.height > this.ctx.canvas.height) {
+        if (this.position.y - this.height > this.state.ctx.canvas.height) {
           this.life = 0;
         }
         this.position.x += this.vector.x * this.speed;
