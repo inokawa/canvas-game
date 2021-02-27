@@ -33,20 +33,20 @@ export const init = async () => {
 
   const characters: Character[] = [];
 
-  const shotArray = Array.from({ length: SHOT_MAX_COUNT }).map(
+  const shots = Array.from({ length: SHOT_MAX_COUNT }).map(
     () => new Shot(ctx, viperShotImage, { w: 32, h: 32 })
   );
-  const singleShotArray = Array.from({
+  const singleShots = Array.from({
     length: SHOT_MAX_COUNT * 2,
   }).map(() => new Shot(ctx, viperSingleShotImage, { w: 32, h: 32 }));
-  characters.push(...shotArray, ...singleShotArray);
+  characters.push(...shots, ...singleShots);
 
   const player = new Player(
     state,
     ctx,
     viperImage,
     { w: 64, h: 64 },
-    { shot: shotArray, singleShot: singleShotArray }
+    { shot: shots, singleShot: singleShots }
   );
   characters.push(player);
   player.setComing(
@@ -56,16 +56,16 @@ export const init = async () => {
     CANVAS_HEIGHT - 100
   );
 
-  const enemyShotArray = Array.from({ length: ENEMY_SHOT_MAX_COUNT }).map(
+  const enemyShots = Array.from({ length: ENEMY_SHOT_MAX_COUNT }).map(
     () => new Shot(ctx, enemyShotImage, { w: 48, h: 48 })
   );
-  characters.push(...enemyShotArray);
+  characters.push(...enemyShots);
 
-  const enemyArray = Array.from({ length: ENEMY_MAX_COUNT }).map(
-    () => new Enemy(ctx, enemySmallImage, { w: 48, h: 48 }, enemyShotArray)
+  const enemies = Array.from({ length: ENEMY_MAX_COUNT }).map(
+    () => new Enemy(ctx, enemySmallImage, { w: 48, h: 48 }, enemyShots)
   );
-  characters.push(...enemyArray);
-  [...shotArray, ...singleShotArray].forEach((s) => s.setTargets(enemyArray));
+  characters.push(...enemies);
+  [...shots, ...singleShots].forEach((s) => s.setTargets(enemies));
 
   const scene = new SceneManager();
   scene.add("intro", (time) => {
@@ -76,8 +76,8 @@ export const init = async () => {
   scene.add("invade", (time) => {
     if (scene.frame == 0) {
       for (let i = 0; i < ENEMY_MAX_COUNT; i++) {
-        if (enemyArray[i].life <= 0) {
-          const e = enemyArray[i];
+        if (enemies[i].life <= 0) {
+          const e = enemies[i];
           e.set(CANVAS_WIDTH / 2, -e.height, 2, "default");
           e.setVector(0.0, 1.0);
           break;
