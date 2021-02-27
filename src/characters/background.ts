@@ -21,6 +21,7 @@ export class BackgroundStar extends ObjectBase {
   }
 
   update() {
+    this.state.ctx.globalAlpha = 1.0;
     this.state.ctx.fillStyle = this.color;
     this.position.y += this.speed;
     this.state.ctx.fillRect(
