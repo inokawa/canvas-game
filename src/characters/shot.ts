@@ -1,9 +1,11 @@
 import { Character, CharacterOpt } from "./base";
+import { Explosion } from "./explosion";
 
 export class Shot extends Character {
   speed: number = 7;
   power: number = 1;
   targetArray: Character[] = [];
+  explosionArray: Explosion[] = [];
 
   constructor(
     ctx: CanvasRenderingContext2D,
@@ -32,6 +34,10 @@ export class Shot extends Character {
     this.targetArray = targets;
   }
 
+  setExplosions(explosions: Explosion[]) {
+    this.explosionArray = explosions;
+  }
+
   update() {
     if (this.life <= 0) return;
     if (
@@ -49,6 +55,15 @@ export class Shot extends Character {
         const dist = this.position.distance(t.position);
         if (dist <= (this.width + t.width) / 4) {
           t.life -= this.power;
+          if (t.life <= 0) {
+            for (const e of this.explosionArray) {
+              if (!e.life) {
+                e.set(t.position.x, t.position.y);
+                break;
+              }
+            }
+          }
+
           this.life = 0;
         }
       });

@@ -1,5 +1,5 @@
 import * as util from "./canvas";
-import { State, Player, Shot, Character, Enemy } from "./characters";
+import { State, Player, Shot, Character, Enemy, Explosion } from "./characters";
 import { SceneManager } from "./scene";
 import { array } from "./utils";
 import viperImage from "./assets/images/viper.png";
@@ -17,6 +17,7 @@ export const init = async () => {
   const SHOT_MAX_COUNT = 10;
   const ENEMY_MAX_COUNT = 10;
   const ENEMY_SHOT_MAX_COUNT = 50;
+  const EXPLOSION_MAX_COUNT = 10;
 
   const state: State = {
     isKeyDown: {
@@ -71,7 +72,16 @@ export const init = async () => {
     () => new Enemy(ctx, enemySmallImage, { w: 48, h: 48 }, enemyShots)
   );
   characters.push(...enemies);
-  [...shots, ...singleShots].forEach((s) => s.setTargets(enemies));
+
+  const explosions = array(
+    EXPLOSION_MAX_COUNT,
+    () => new Explosion(ctx, 50.0, 15, 30.0, 0.25)
+  );
+
+  [...shots, ...singleShots].forEach((s) => {
+    s.setTargets(enemies);
+    s.setExplosions(explosions);
+  });
 
   const scene = new SceneManager();
   scene.add("intro", (time) => {
@@ -155,6 +165,7 @@ export const init = async () => {
     scene.update();
 
     characters.forEach((c) => c.update());
+    explosions.forEach((e) => e.update());
     requestAnimationFrame(render);
   }
 };
