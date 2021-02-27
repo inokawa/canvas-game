@@ -4,6 +4,7 @@ import { array } from "../utils";
 type Fire = {
   position: Position;
   vector: Vector;
+  size: number;
 };
 
 export class Explosion extends ObjectBase {
@@ -38,6 +39,7 @@ export class Explosion extends ObjectBase {
     this.fires = array(this.count, () => ({
       position: new Position(x, y),
       vector: Vector.fromAngle(Math.random() * Math.PI * 2.0),
+      size: (Math.random() * 0.5 + 0.5) * this.size,
     }));
     this.life = true;
     this.startTime = Date.now();
@@ -50,15 +52,16 @@ export class Explosion extends ObjectBase {
 
     const time = (Date.now() - this.startTime) / 1000;
     const progress = Math.min(time / this.timeRange, 1.0);
+    const s = 1.0 - progress;
     for (const f of this.fires) {
       const d = this.radius * progress;
       const x = f.position.x + f.vector.x * d;
       const y = f.position.y + f.vector.y * d;
       this.ctx.fillRect(
-        x - this.size / 2,
-        y - this.size / 2,
-        this.size,
-        this.size
+        x - (f.size * s) / 2,
+        y - (f.size * s) / 2,
+        f.size * s,
+        f.size * s
       );
     }
 
