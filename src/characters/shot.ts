@@ -14,7 +14,7 @@ export class Shot extends Character {
     super(state, imagePath, option);
   }
 
-  set(x: number, y: number) {
+  set(x: number, y: number, speed: number = 7, power: number = 1) {
     this.position.set(x, y);
     this.life = 1;
   }
