@@ -41,6 +41,14 @@ export class Enemy extends Character {
     }
   }
 
+  destroyed() {
+    if (this.type === "large") {
+      this.state.gameScore.add(1000);
+    } else {
+      this.state.gameScore.add(100);
+    }
+  }
+
   update() {
     if (this.life <= 0) return;
 
@@ -131,6 +139,10 @@ export class Boss extends Enemy {
         break;
       }
     }
+  }
+
+  destroyed() {
+    this.state.gameScore.add(15000);
   }
 
   update() {

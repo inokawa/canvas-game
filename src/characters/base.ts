@@ -137,6 +137,12 @@ export class Character extends ObjectBase {
     this.state.ctx.restore();
   }
 
+  isInvincible(): boolean {
+    return false;
+  }
+
+  destroyed() {}
+
   update() {}
 
   ready(): boolean {

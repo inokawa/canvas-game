@@ -58,8 +58,7 @@ export class Shot extends Character {
     if (this.life > 0) {
       this.targetArray.forEach((t) => {
         if (t.life <= 0) return;
-        if (this.hasCollision(t)) {
-          if (t instanceof Player && t.isComing) return;
+        if (this.hasCollision(t) && !t.isInvincible()) {
           t.life -= this.power;
           if (t.life <= 0) {
             for (const e of this.explosionArray) {
@@ -68,17 +67,8 @@ export class Shot extends Character {
                 break;
               }
             }
+            t.destroyed();
           }
-          if (t instanceof Enemy) {
-            if (t.type === "large") {
-              this.state.gameScore.add(1000);
-            } else {
-              this.state.gameScore.add(100);
-            }
-          } else if (t instanceof Boss) {
-            this.state.gameScore.add(15000);
-          }
-
           this.life = 0;
         }
       });

@@ -35,6 +35,10 @@ export class Player extends Character {
     this.singleShotArray = singleShot;
   }
 
+  isInvincible(): boolean {
+    return this.isComing;
+  }
+
   update() {
     if (this.life <= 0) return;
     if (
