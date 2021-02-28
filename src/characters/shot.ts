@@ -37,6 +37,11 @@ export class Shot extends Character {
     this.explosionArray = explosions;
   }
 
+  hasCollision(t: Character): boolean {
+    const dist = this.position.distance(t.position);
+    return dist <= (this.width + t.width) / 4;
+  }
+
   update() {
     if (this.life <= 0) return;
     if (
@@ -53,8 +58,7 @@ export class Shot extends Character {
     if (this.life > 0) {
       this.targetArray.forEach((t) => {
         if (t.life <= 0) return;
-        const dist = this.position.distance(t.position);
-        if (dist <= (this.width + t.width) / 4) {
+        if (this.hasCollision(t)) {
           if (t instanceof Player && t.isComing) return;
           t.life -= this.power;
           if (t.life <= 0) {
