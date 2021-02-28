@@ -1,5 +1,5 @@
 import { State } from "../state";
-import { loadImage, dot } from "../utils";
+import { dot } from "../utils";
 
 export class Vector {
   x: number;
@@ -82,11 +82,11 @@ export class Character extends ObjectBase {
   width: number;
   height: number;
   life: number;
-  image?: HTMLImageElement;
+  image: HTMLImageElement;
 
   constructor(
     state: State,
-    imagePath: string,
+    image: HTMLImageElement,
     { x = 0, y = 0, w, h, life = 0 }: CharacterOpt
   ) {
     super();
@@ -96,9 +96,7 @@ export class Character extends ObjectBase {
     this.width = w;
     this.height = h;
     this.life = life;
-    (async () => {
-      this.image = await loadImage(imagePath);
-    })();
+    this.image = image;
   }
 
   setVector(x: number, y: number) {
@@ -110,7 +108,6 @@ export class Character extends ObjectBase {
   }
 
   draw() {
-    if (!this.image) return;
     const offsetX = this.width / 2;
     const offsetY = this.height / 2;
     this.state.ctx.drawImage(
@@ -123,7 +120,6 @@ export class Character extends ObjectBase {
   }
 
   rotationDraw() {
-    if (!this.image) return;
     this.state.ctx.save();
     this.state.ctx.translate(this.position.x, this.position.y);
     this.state.ctx.rotate(this.vector.angle - Math.PI * 1.5);

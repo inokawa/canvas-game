@@ -19,7 +19,7 @@ export class Player extends Character {
 
   constructor(
     state: State,
-    imagePath: string,
+    image: HTMLImageElement,
     option: CharacterOpt,
     {
       shot,
@@ -29,7 +29,7 @@ export class Player extends Character {
       singleShot: Shot[];
     }
   ) {
-    super(state, imagePath, option);
+    super(state, image, option);
     this.state = state;
     this.shotArray = shot;
     this.singleShotArray = singleShot;

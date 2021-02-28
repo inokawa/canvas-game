@@ -10,7 +10,7 @@ import {
 } from "./characters";
 import { SceneManager } from "./scene";
 import { initState } from "./state";
-import { array, degToRad } from "./utils";
+import { array, degToRad, loadImage } from "./utils";
 import viperImage from "./assets/images/viper.png";
 import viperShotImage from "./assets/images/viper_shot.png";
 import viperSingleShotImage from "./assets/images/viper_single_shot.png";
@@ -45,22 +45,35 @@ export const init = async () => {
   const state = initState(ctx);
   let restart: boolean = false;
 
+  const images = await Promise.all([
+    loadImage(viperImage),
+    loadImage(viperShotImage),
+    loadImage(viperSingleShotImage),
+  ]);
+  const enemyImages = await Promise.all([
+    loadImage(enemySmallImage),
+    loadImage(enemyLargeImage),
+    loadImage(enemyShotImage),
+    loadImage(bossImage),
+    loadImage(homingImage),
+  ]);
+
   const objects: ObjectBase[] = [];
 
   const shots = array(
     SHOT_MAX_COUNT,
-    () => new Shot(state, viperShotImage, { w: 32, h: 32 })
+    () => new Shot(state, images[1], { w: 32, h: 32 })
   );
 
   const singleShots = array(
     SHOT_MAX_COUNT * 2,
-    () => new Shot(state, viperSingleShotImage, { w: 32, h: 32 })
+    () => new Shot(state, images[2], { w: 32, h: 32 })
   );
   objects.push(...shots, ...singleShots);
 
   const player = new Player(
     state,
-    viperImage,
+    images[0],
     { w: 64, h: 64 },
     { shot: shots, singleShot: singleShots }
   );
@@ -74,12 +87,12 @@ export const init = async () => {
 
   const homings = array(
     HOMING_MAX_COUNT,
-    () => new Homing(state, homingImage, { w: 32, h: 32 })
+    () => new Homing(state, enemyImages[4], { w: 32, h: 32 })
   );
   const enemyShots = [
     ...array(
       ENEMY_SHOT_MAX_COUNT,
-      () => new Shot(state, enemyShotImage, { w: 48, h: 48 })
+      () => new Shot(state, enemyImages[2], { w: 48, h: 48 })
     ),
     ...homings,
   ];
@@ -87,7 +100,7 @@ export const init = async () => {
 
   const boss = new Boss(
     state,
-    bossImage,
+    enemyImages[3],
     { w: 128, h: 128 },
     player,
     enemyShots,
@@ -97,12 +110,12 @@ export const init = async () => {
     ...array(
       ENEMY_SMALL_MAX_COUNT,
       () =>
-        new Enemy(state, enemySmallImage, { w: 48, h: 48 }, player, enemyShots)
+        new Enemy(state, enemyImages[0], { w: 48, h: 48 }, player, enemyShots)
     ),
     ...array(
       ENEMY_LARGE_MAX_COUNT,
       () =>
-        new Enemy(state, enemyLargeImage, { w: 64, h: 64 }, player, enemyShots)
+        new Enemy(state, enemyImages[1], { w: 64, h: 64 }, player, enemyShots)
     ),
     boss,
   ];

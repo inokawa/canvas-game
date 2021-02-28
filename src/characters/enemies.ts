@@ -13,12 +13,12 @@ export class Enemy extends Character {
 
   constructor(
     state: State,
-    imagePath: string,
+    image: HTMLImageElement,
     option: CharacterOpt,
     target: Character,
     shots: Shot[]
   ) {
-    super(state, imagePath, option);
+    super(state, image, option);
     this.attackTarget = target;
     this.shotArray = shots;
   }
@@ -94,13 +94,13 @@ export class Boss extends Enemy {
 
   constructor(
     state: State,
-    imagePath: string,
+    image: HTMLImageElement,
     option: CharacterOpt,
     target: Character,
     shots: Shot[],
     homingShots: Homing[]
   ) {
-    super(state, imagePath, option, target, shots);
+    super(state, image, option, target, shots);
     this.mode = "";
     this.frame = 0;
     this.speed = 3;

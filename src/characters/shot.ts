@@ -10,8 +10,8 @@ export class Shot extends Character {
   targetArray: Character[] = [];
   explosionArray: Explosion[] = [];
 
-  constructor(state: State, imagePath: string, option: CharacterOpt) {
-    super(state, imagePath, option);
+  constructor(state: State, image: HTMLImageElement, option: CharacterOpt) {
+    super(state, image, option);
   }
 
   set(x: number, y: number, speed: number = 7, power: number = 1) {
@@ -90,8 +90,8 @@ export class Shot extends Character {
 export class Homing extends Shot {
   frame: number = 0;
 
-  constructor(state: State, imagePath: string, option: CharacterOpt) {
-    super(state, imagePath, option);
+  constructor(state: State, image: HTMLImageElement, option: CharacterOpt) {
+    super(state, image, option);
   }
 
   set(x: number, y: number, speed: number, power: number) {
