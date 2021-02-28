@@ -1,5 +1,5 @@
 import { Character, CharacterOpt, Vector } from "./base";
-import { Shot } from "./shot";
+import { Homing, Shot } from "./shot";
 import { State } from "../state";
 
 type EnemyType = "default" | "wave" | "large";
@@ -8,7 +8,7 @@ export class Enemy extends Character {
   speed: number = 3;
   frame = 0;
   type: EnemyType = "default";
-  attactTarget: Character;
+  attackTarget: Character;
   shotArray: Shot[];
 
   constructor(
@@ -19,7 +19,7 @@ export class Enemy extends Character {
     shots: Shot[]
   ) {
     super(state, imagePath, option);
-    this.attactTarget = target;
+    this.attackTarget = target;
     this.shotArray = shots;
   }
 
@@ -54,8 +54,8 @@ export class Enemy extends Character {
         break;
       case "wave":
         if (this.frame % 60 === 0) {
-          const tx = this.attactTarget.position.x - this.position.x;
-          const ty = this.attactTarget.position.y - this.position.y;
+          const tx = this.attackTarget.position.x - this.position.x;
+          const ty = this.attackTarget.position.y - this.position.y;
           const tv = Vector.unit(tx, ty);
           this.fire(tv.x, tv.y, 4.0);
         }
@@ -77,6 +77,97 @@ export class Enemy extends Character {
     }
     if (this.position.y - this.height > this.state.ctx.canvas.height) {
       this.life = 0;
+    }
+
+    this.draw();
+    this.frame++;
+  }
+}
+
+type BossMode = "invade" | "escape" | "floating" | "";
+
+export class Boss extends Enemy {
+  mode: BossMode;
+  frame: number;
+  speed: number;
+  homingArray: Shot[];
+
+  constructor(
+    state: State,
+    imagePath: string,
+    option: CharacterOpt,
+    target: Character,
+    shots: Shot[],
+    homingShots: Homing[]
+  ) {
+    super(state, imagePath, option, target, shots);
+    this.mode = "";
+    this.frame = 0;
+    this.speed = 3;
+    this.homingArray = homingShots;
+  }
+
+  setMode(mode: BossMode) {
+    this.mode = mode;
+  }
+
+  fire(x: number = 0.0, y: number = 1.0, speed: number = 5.0) {
+    for (const s of this.shotArray) {
+      if (s.life <= 0) {
+        s.set(this.position.x, this.position.y);
+        s.setSpeed(speed);
+        s.setVector(x, y);
+        break;
+      }
+    }
+  }
+
+  homingFire(x: number = 0.0, y: number = 1.0, speed: number = 3.0) {
+    for (const s of this.homingArray) {
+      if (s.life <= 0) {
+        s.set(this.position.x, this.position.y);
+        s.setSpeed(speed);
+        s.setVector(x, y);
+        break;
+      }
+    }
+  }
+
+  update() {
+    if (this.life <= 0) return;
+
+    switch (this.mode) {
+      case "invade":
+        this.position.y += this.speed;
+        if (this.position.y > 100) {
+          this.position.y = 100;
+          this.mode = "floating";
+          this.frame = 0;
+        }
+        break;
+      case "escape":
+        this.position.y -= this.speed;
+        if (this.position.y < -this.height) {
+          this.life = 0;
+        }
+        break;
+      case "floating":
+        if (this.frame % 1000 < 500) {
+          if (this.frame % 200 > 140 && this.frame % 10 === 0) {
+            const tx = this.attackTarget.position.x - this.position.x;
+            const ty = this.attackTarget.position.y - this.position.y;
+            const tv = Vector.unit(tx, ty);
+            this.fire(tv.x, tv.y, 3.0);
+          }
+        } else {
+          if (this.frame % 50 === 0) {
+            this.homingFire(0, 1, 3.5);
+          }
+        }
+        this.position.x += Math.cos(this.frame / 100) * 2.0;
+        break;
+      default:
+        break;
     }
 
     this.draw();

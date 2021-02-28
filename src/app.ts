@@ -1,5 +1,13 @@
 import * as util from "./canvas";
-import { Player, Shot, Enemy, Explosion, ObjectBase } from "./characters";
+import {
+  Player,
+  Shot,
+  Enemy,
+  Explosion,
+  ObjectBase,
+  Boss,
+  Homing,
+} from "./characters";
 import { SceneManager } from "./scene";
 import { initState } from "./state";
 import { array, degToRad } from "./utils";
@@ -9,6 +17,8 @@ import viperSingleShotImage from "./assets/images/viper_single_shot.png";
 import enemySmallImage from "./assets/images/enemy_small.png";
 import enemyLargeImage from "./assets/images/enemy_large.png";
 import enemyShotImage from "./assets/images/enemy_shot.png";
+import bossImage from "./assets/images/boss.png";
+import homingImage from "./assets/images/homing_shot.png";
 import { BackgroundStar } from "./characters/background";
 
 export const init = async () => {
@@ -21,6 +31,8 @@ export const init = async () => {
   const ENEMY_SMALL_MAX_COUNT = 20;
   const ENEMY_LARGE_MAX_COUNT = 5;
   const ENEMY_SHOT_MAX_COUNT = 50;
+  const HOMING_MAX_COUNT = 50;
+
   const EXPLOSION_MAX_COUNT = 10;
 
   const BACKGROUND_STAR_MAX_COUNT = 100;
@@ -60,12 +72,27 @@ export const init = async () => {
     CANVAS_HEIGHT - 100
   );
 
-  const enemyShots = array(
-    ENEMY_SHOT_MAX_COUNT,
-    () => new Shot(state, enemyShotImage, { w: 48, h: 48 })
+  const homings = array(
+    HOMING_MAX_COUNT,
+    () => new Homing(state, homingImage, { w: 32, h: 32 })
   );
+  const enemyShots = [
+    ...array(
+      ENEMY_SHOT_MAX_COUNT,
+      () => new Shot(state, enemyShotImage, { w: 48, h: 48 })
+    ),
+    ...homings,
+  ];
   objects.push(...enemyShots);
 
+  const boss = new Boss(
+    state,
+    bossImage,
+    { w: 128, h: 128 },
+    player,
+    enemyShots,
+    homings
+  );
   const enemies = [
     ...array(
       ENEMY_SMALL_MAX_COUNT,
@@ -77,6 +104,7 @@ export const init = async () => {
       () =>
         new Enemy(state, enemyLargeImage, { w: 64, h: 64 }, player, enemyShots)
     ),
+    boss,
   ];
   objects.push(...enemies);
 
@@ -172,10 +200,23 @@ export const init = async () => {
       }
     }
     if (scene.frame === 500) {
-      scene.use("intro");
+      scene.use("invade_boss");
     }
     if (player.life <= 0) {
       scene.use("gameover");
+    }
+  });
+  scene.add("invade_boss", (time) => {
+    if (scene.frame === 0) {
+      boss.set(CANVAS_WIDTH / 2, -boss.height, 250);
+      boss.setMode("invade");
+    }
+    if (player.life <= 0) {
+      scene.use("gameover");
+      boss.setMode("escape");
+    }
+    if (boss.life <= 0) {
+      scene.use("intro");
     }
   });
   scene.add("gameover", (time) => {
