@@ -5,11 +5,11 @@ import { State } from "../state";
 type EnemyType = "default" | "wave" | "large";
 
 export class Enemy extends Character {
-  speed: number = 3;
-  frame = 0;
+  protected speed: number = 3;
+  protected frame = 0;
   type: EnemyType = "default";
-  attackTarget: Character;
-  shotArray: Shot[];
+  protected attackTarget: Character;
+  protected shotArray: Shot[];
 
   constructor(
     state: State,
@@ -95,10 +95,8 @@ export class Enemy extends Character {
 type BossMode = "invade" | "escape" | "floating" | "";
 
 export class Boss extends Enemy {
-  mode: BossMode;
-  frame: number;
-  speed: number;
-  homingArray: Shot[];
+  private mode: BossMode;
+  private homingArray: Shot[];
 
   constructor(
     state: State,

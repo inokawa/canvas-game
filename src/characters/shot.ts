@@ -5,10 +5,10 @@ import { Player } from "./player";
 import { State } from "../state";
 
 export class Shot extends Character {
-  speed: number = 7;
-  power: number = 1;
-  targetArray: Character[] = [];
-  explosionArray: Explosion[] = [];
+  protected speed: number = 7;
+  protected power: number = 1;
+  protected targetArray: Character[] = [];
+  protected explosionArray: Explosion[] = [];
 
   constructor(state: State, image: HTMLImageElement, option: CharacterOpt) {
     super(state, image, option);
@@ -78,7 +78,7 @@ export class Shot extends Character {
 }
 
 export class Homing extends Shot {
-  frame: number = 0;
+  private frame: number = 0;
 
   constructor(state: State, image: HTMLImageElement, option: CharacterOpt) {
     super(state, image, option);

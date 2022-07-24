@@ -4,18 +4,17 @@ import { degToRad } from "../utils";
 import { State } from "../state";
 
 export class Player extends Character {
-  state: State;
-  speed: number = 3;
+  private speed: number = 3;
 
-  shotArray: Shot[];
-  singleShotArray: Shot[];
-  shotCheckCounter = 0;
-  shotInterval = 10;
+  private shotArray: Shot[];
+  private singleShotArray: Shot[];
+  private shotCheckCounter = 0;
+  private shotInterval = 10;
 
   isComing: boolean = false;
-  comingStart?: number;
-  comingStartPosition?: Vector;
-  comingEndPosition?: Vector;
+  private comingStart?: number;
+  private comingStartPosition?: Vector;
+  private comingEndPosition?: Vector;
 
   constructor(
     state: State,

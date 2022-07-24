@@ -8,15 +8,15 @@ type Fire = {
 };
 
 export class Explosion extends ObjectBase {
-  ctx: CanvasRenderingContext2D;
+  private ctx: CanvasRenderingContext2D;
   life: boolean = false;
-  radius: number;
-  count: number;
-  size: number;
-  fires: Fire[] = [];
-  startTime = 0;
-  timeRange: number;
-  color: string;
+  private radius: number;
+  private count: number;
+  private size: number;
+  private fires: Fire[] = [];
+  private startTime = 0;
+  private timeRange: number;
+  private color: string;
 
   constructor(
     ctx: CanvasRenderingContext2D,

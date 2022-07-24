@@ -59,8 +59,8 @@ export class Vector {
   }
 }
 
-export class ObjectBase {
-  update() {}
+export abstract class ObjectBase {
+  abstract update(): void;
 
   ready(): boolean {
     return true;
@@ -75,14 +75,14 @@ export type CharacterOpt = {
   life?: number;
 };
 
-export class Character extends ObjectBase {
-  state: State;
+export abstract class Character extends ObjectBase {
+  protected state: State;
   position: Vector;
-  vector: Vector;
+  protected vector: Vector;
   width: number;
   height: number;
   life: number;
-  image: HTMLImageElement;
+  private image: HTMLImageElement;
 
   constructor(
     state: State,
@@ -143,7 +143,7 @@ export class Character extends ObjectBase {
 
   destroyed() {}
 
-  update() {}
+  abstract update(): void;
 
   ready(): boolean {
     return !!this.image;
